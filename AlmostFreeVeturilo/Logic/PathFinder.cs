@@ -12,20 +12,27 @@ namespace AlmostFreeVeturilo.Logic
     {
         public async Task<List<PathPart>> GetStartStations(float lat, float lng)
         {
-            var usefulStations = await GetStationsWithBikes();
 
+            var usefulStations = await GetStationsWithBikes();
             var takenStations = usefulStations.OrderBy(x => MathF.Pow(x.Lat - lat, 2) + MathF.Pow(x.Lng - lng, 2)).Take(Common.MaxMatrixRequest);
-            return await MockGetDistances(lat, lng, takenStations);
+
+            return await FillDistances(lat, lng, takenStations);
         }
 
-        private async Task<List<PathPart>> MockGetDistances(float lat, float lng, IEnumerable<PathPart> parts)
+        public async Task<IEnumerable<PathPart>> GetStationsWithBikes()
+        {
+            var places = await new VeturiloProxy().GetVeturiloPlaces();
+            return places.Where(x => x.bikes >= Common.MinBikesOnStation).Select(x => new PathPart(x.uid, (float)x.lat, (float)x.lng));
+        }
+
+        private async Task<List<PathPart>> FillDistances(float lat, float lng, IEnumerable<PathPart> parts)
         {
             var stations = parts.ToList();
 
             var origins = new List<(float lat, float lng)> { (lat, lng) };
             var destinations = stations.Select(x => (x.Lat, x.Lng));
 
-            var connectionMatrix = await new GoogleProxy().GetConnectionMatrix(origins, destinations);
+            var connectionMatrix = await new GoogleProxy().GetConnectionMatrix(origins, destinations, false);
             if (connectionMatrix.status != "OK")
                 return null;
 
@@ -40,22 +47,27 @@ namespace AlmostFreeVeturilo.Logic
             return stations.OrderBy(x => x.Distance).ToList();
         }
 
-        private async Task<IEnumerable<PathPart>> GetStationsWithBikes()
-        {
-            var data = await new VeturiloProxy().GetVeturiloData();
-            var places = data.countries.First().cities.First().places;
 
-            return places.Where(x => x.bikes >= Common.MinBikesOnStation).Select(x => new PathPart(x.uid, (float)x.lat, (float)x.lng));
-        }
-
-        public VeturiloPath GetPath(int uid, float lat, float lng)
+        public async Task<VeturiloPath> GetPath(PathPart start, float lat, float lng)
         {
-            //take first
+            var end = await GetEndStation(lat, lng);
+
+            var usefulStations = await GetStationsWithBikes();
             //take few closest
             //take last
             //
 
             return null;
+        }
+
+        public async Task<PathPart> GetEndStation(float lat, float lng)
+        {
+            var places = await new VeturiloProxy().GetVeturiloPlaces();
+            var stations = places.Select(x => new PathPart(x.uid, (float)x.lat, (float)x.lng));
+            var takenStations = stations.OrderBy(x => MathF.Pow(x.Lat - lat, 2) + MathF.Pow(x.Lng - lng, 2)).Take(Common.MaxMatrixRequest);
+
+            var potentialEndStations = await FillDistances(lat, lng, takenStations);
+            return potentialEndStations.OrderBy(x => x.Distance).First();
         }
     }
 }
