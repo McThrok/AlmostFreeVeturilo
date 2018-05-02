@@ -2,9 +2,14 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Xml;
+using AlmostFreeVeturilo.DataAccess;
 using AlmostFreeVeturilo.Logic.GoogleApi;
 using AlmostFreeVeturilo.Logic.VeturiloApi;
 using AlmostFreeVeturilo.Models;
+using AlmostFreeVeturilo.Models.DatabaseModels;
+using Microsoft.EntityFrameworkCore;
+using Newtonsoft.Json;
 
 namespace AlmostFreeVeturilo.Logic
 {
@@ -32,7 +37,7 @@ namespace AlmostFreeVeturilo.Logic
             var origins = new List<(float lat, float lng)> { (lat, lng) };
             var destinations = stations.Select(x => (x.Lat, x.Lng));
 
-            var connectionMatrix = await  GoogleProxy.Instance.GetConnectionMatrix(origins, destinations, false);
+            var connectionMatrix = await GoogleProxy.Instance.GetConnectionMatrix(origins, destinations, false);
             if (connectionMatrix.status != "OK")
                 return null;
 
@@ -51,16 +56,70 @@ namespace AlmostFreeVeturilo.Logic
         public async Task<VeturiloPath> GetPath(PathPart start, float lat, float lng)
         {
             var end = await GetEndStation(lat, lng);
-
             var usefulStations = await GetStationsWithBikes();
-            //take few closest
-            //take last
-            //
+
+            var uids = usefulStations.Select(x => x.Uid).ToList();
+
+            if (!uids.Contains(start.Uid))
+                uids.Add(start.Uid);
+
+            var edges = GetEdges(GetConnections(uids, end.Uid));
+            //dijkstra
+            //path
+
+
 
             return null;
         }
 
-        public async Task<PathPart> GetEndStation(float lat, float lng)
+        private EdgeCollections GetEdges(IEnumerable<Connection> connections)
+        {
+            return null;
+        }
+
+        public class EdgeCollections
+        {
+            private Dictionary<int, Dictionary<int, float>> _weights = new Dictionary<int, Dictionary<int, float>>();
+
+            public void AddEdge(int from, int to, float weight)
+            {
+                Adjust(ref from, ref to);
+                if (!_weights.ContainsKey(from))
+                    _weights[from] = new Dictionary<int, float>();
+                _weights[from][to] = weight;
+            }
+
+            public float GetWeght(int from, int to)
+            {
+                Adjust(ref from, ref to);
+                return _weights[from][to];
+            }
+
+            private void Adjust(ref int from, ref int to)
+            {
+                if (from > to)
+                {
+                    var x = from;
+                    from = to;
+                    to = x;
+                }
+            }
+
+        }
+
+        private IEnumerable<Connection> GetConnections(IEnumerable<int> uids, int endUid)
+        {
+            IEnumerable<Connection> connections = null;
+            using (var db = new DataContext())
+            {
+                connections = db.Connections.Where(x =>
+                    uids.Contains(x.StationFromUid) && uids.Contains(x.StationToUid) ||
+                     x.StationToUid == endUid && x.StationFromUid == endUid);
+            }
+            return connections;
+        }
+
+        private async Task<PathPart> GetEndStation(float lat, float lng)
         {
             var places = await VeturiloProxy.Instance.GetVeturiloPlaces();
             var stations = places.Select(x => new PathPart(x.uid, (float)x.lat, (float)x.lng));

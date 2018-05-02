@@ -1,111 +1,111 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using AlmostFreeVeturilo.DataAccess;
-using AlmostFreeVeturilo.Logic.GoogleApi;
-using AlmostFreeVeturilo.Models.DatabaseModels;
+﻿//using System.Collections.Generic;
+//using System.Linq;
+//using System.Threading.Tasks;
+//using AlmostFreeVeturilo.DataAccess;
+//using AlmostFreeVeturilo.Logic.GoogleApi;
+//using AlmostFreeVeturilo.Models.DatabaseModels;
 
-namespace AlmostFreeVeturilo.Logic
-{
-    public class ConnectionCollecter
-    {
-        public async Task LoadData()
-        {
-            var key = ApiKeyGetter.Instance.GetKey();
+//namespace AlmostFreeVeturilo.Logic
+//{
+//    public class ConnectionCollecter
+//    {
+//        public async Task LoadData()
+//        {
+//            var key = ApiKeyGetter.Instance.GetKey();
 
-            using (var db = new DataContext())
-            {
-                while (true)
-                {
-                    var input = ChooseInputData(db);
+//            using (var db = new DataContext())
+//            {
+//                while (true)
+//                {
+//                    var input = ChooseInputData(db);
 
-                    var matrix = await GoogleProxy.Instance.GetConnectionMatrix(input.origins.Select(x => (x.Lat, x.Lng)), input.destinations.Select(x => (x.Lat, x.Lng)));
-                    var connections = SaveData(matrix, input.origins, input.destinations);
+//                    var matrix = await GoogleProxy.Instance.GetConnectionMatrix(input.origins.Select(x => (x.Lat, x.Lng)), input.destinations.Select(x => (x.Lat, x.Lng)));
+//                    var connections = SaveData(matrix, input.origins, input.destinations);
 
-                    if (connections.Count == 0)
-                        return;
+//                    if (connections.Count == 0)
+//                        return;
 
-                    db.Connections.AddRange(connections);
-                    db.SaveChanges();
-                }
-            }
+//                    db.Connections.AddRange(connections);
+//                    db.SaveChanges();
+//                }
+//            }
 
-        }
+//        }
 
-        private (List<Station> origins, List<Station> destinations) ChooseInputData(DataContext db)
-        {
-            var stations = db.Stations.ToList();
-            var isConnectionQuery = db.Stations.Select(
-                   a => db.Stations.Select(
-                       b => ((a.Uid < b.Uid) ? new bool?(db.Connections.Any(con => con.StationFrom.Id == a.Id && con.StationTo.Id == b.Id)) : null)
-                       ).ToList()
-                   ).ToList();
+//        private (List<Station> origins, List<Station> destinations) ChooseInputData(DataContext db)
+//        {
+//            var stations = db.Stations.ToList();
+//            var isConnectionQuery = db.Stations.Select(
+//                   a => db.Stations.Select(
+//                       b => ((a.Uid < b.Uid) ? new bool?(db.Connections.Any(con => con.StationFrom.Id == a.Id && con.StationTo.Id == b.Id)) : null)
+//                       ).ToList()
+//                   ).ToList();
 
-            var origins = new List<Station>();
-            var destinations = new List<Station>();
+//            var origins = new List<Station>();
+//            var destinations = new List<Station>();
 
-            int[] count = { 0, 0, 0 };
-            foreach (var row in isConnectionQuery)
-            {
-                foreach (var value in row)
-                {
-                    if (value == true)
-                        count[0]++;
-                    if (value == false)
-                        count[1]++;
-                    if (value == null)
-                        count[2]++;
-                }
-            }
+//            int[] count = { 0, 0, 0 };
+//            foreach (var row in isConnectionQuery)
+//            {
+//                foreach (var value in row)
+//                {
+//                    if (value == true)
+//                        count[0]++;
+//                    if (value == false)
+//                        count[1]++;
+//                    if (value == null)
+//                        count[2]++;
+//                }
+//            }
 
-            for (int i = 0; i < isConnectionQuery.Count; i++)
-            {
-                var row = isConnectionQuery[i];
+//            for (int i = 0; i < isConnectionQuery.Count; i++)
+//            {
+//                var row = isConnectionQuery[i];
 
-                for (int j = 0; j < row.Count; j++)
-                {
-                    if (row[j].HasValue && !row[j].Value)
-                    {
-                        if (origins.Count == 0)
-                            origins.Add(stations[i]);
+//                for (int j = 0; j < row.Count; j++)
+//                {
+//                    if (row[j].HasValue && !row[j].Value)
+//                    {
+//                        if (origins.Count == 0)
+//                            origins.Add(stations[i]);
 
-                        if (destinations.Count < Common.MaxMatrixRequest)
-                            destinations.Add(stations[j]);
-                        else
-                            break;
-                    }
-                }
+//                        if (destinations.Count < Common.MaxMatrixRequest)
+//                            destinations.Add(stations[j]);
+//                        else
+//                            break;
+//                    }
+//                }
 
-                if (origins.Count != 0)
-                    break;
-            }
+//                if (origins.Count != 0)
+//                    break;
+//            }
 
-            return (origins, destinations);
-        }
-        private List<ConnectionOld> SaveData(ConnectionMatrix matrix, List<Station> origins, List<Station> destinations)
-        {
-            var connections = new List<ConnectionOld>();
+//            return (origins, destinations);
+//        }
+//        private List<ConnectionOld> SaveData(ConnectionMatrix matrix, List<Station> origins, List<Station> destinations)
+//        {
+//            var connections = new List<ConnectionOld>();
 
-            if (matrix.status != "OK")
-                return connections;
+//            if (matrix.status != "OK")
+//                return connections;
 
-            for (int i = 0; i < origins.Count; i++)
-            {
-                for (int j = 0; j < destinations.Count; j++)
-                {
-                    var el = matrix.rows[i].elements[j];
-                    connections.Add(new ConnectionOld
-                    {
-                        Distance = el.distance.value,
-                        Time = el.duration.value,
-                        StationFrom = origins[i],
-                        StationTo = destinations[j]
-                    });
-                }
-            }
+//            for (int i = 0; i < origins.Count; i++)
+//            {
+//                for (int j = 0; j < destinations.Count; j++)
+//                {
+//                    var el = matrix.rows[i].elements[j];
+//                    connections.Add(new ConnectionOld
+//                    {
+//                        Distance = el.distance.value,
+//                        Time = el.duration.value,
+//                        StationFrom = origins[i],
+//                        StationTo = destinations[j]
+//                    });
+//                }
+//            }
 
-            return connections;
-        }
-    }
-}
+//            return connections;
+//        }
+//    }
+//}
 
