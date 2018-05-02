@@ -21,7 +21,7 @@ namespace AlmostFreeVeturilo.Logic
 
         public async Task<IEnumerable<PathPart>> GetStationsWithBikes()
         {
-            var places = await new VeturiloProxy().GetVeturiloPlaces();
+            var places = await VeturiloProxy.Instance.GetVeturiloPlaces();
             return places.Where(x => x.bikes >= Common.MinBikesOnStation).Select(x => new PathPart(x.uid, (float)x.lat, (float)x.lng));
         }
 
@@ -32,7 +32,7 @@ namespace AlmostFreeVeturilo.Logic
             var origins = new List<(float lat, float lng)> { (lat, lng) };
             var destinations = stations.Select(x => (x.Lat, x.Lng));
 
-            var connectionMatrix = await new GoogleProxy().GetConnectionMatrix(origins, destinations, false);
+            var connectionMatrix = await  GoogleProxy.Instance.GetConnectionMatrix(origins, destinations, false);
             if (connectionMatrix.status != "OK")
                 return null;
 
@@ -62,7 +62,7 @@ namespace AlmostFreeVeturilo.Logic
 
         public async Task<PathPart> GetEndStation(float lat, float lng)
         {
-            var places = await new VeturiloProxy().GetVeturiloPlaces();
+            var places = await VeturiloProxy.Instance.GetVeturiloPlaces();
             var stations = places.Select(x => new PathPart(x.uid, (float)x.lat, (float)x.lng));
             var takenStations = stations.OrderBy(x => MathF.Pow(x.Lat - lat, 2) + MathF.Pow(x.Lng - lng, 2)).Take(Common.MaxMatrixRequest);
 

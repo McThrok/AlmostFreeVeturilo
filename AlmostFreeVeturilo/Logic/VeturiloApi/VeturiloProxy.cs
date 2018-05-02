@@ -1,16 +1,28 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
+using AlmostFreeVeturilo.Logic.GoogleApi;
 using Newtonsoft.Json;
 
 namespace AlmostFreeVeturilo.Logic.VeturiloApi
 {
     public class VeturiloProxy
     {
+        private VeturiloData _dataCache;
+        private DateTime _cacheTime = DateTime.MinValue;
+
+        private static VeturiloProxy _instance;
+        public static VeturiloProxy Instance => _instance ?? (_instance = new VeturiloProxy());
+        private VeturiloProxy() { }
+
         public async Task<VeturiloData> GetVeturiloData()
         {
-            VeturiloData data = null;
+            if (DateTime.Now.Subtract(_cacheTime) < Common.CacheLivespan)
+                return _dataCache;
+
+            _cacheTime = DateTime.Now;
 
             using (var client = new HttpClient())
             {
@@ -19,11 +31,11 @@ namespace AlmostFreeVeturilo.Logic.VeturiloApi
                 if (response.IsSuccessStatusCode)
                 {
                     var json = await response.Content.ReadAsStringAsync();
-                    data = JsonConvert.DeserializeObject<VeturiloData>(json);
+                    _dataCache = JsonConvert.DeserializeObject<VeturiloData>(json);
                 }
             }
 
-            return data;
+            return _dataCache;
         }
 
         public async Task<List<Place>> GetVeturiloPlaces()

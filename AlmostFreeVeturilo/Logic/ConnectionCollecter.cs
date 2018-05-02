@@ -19,7 +19,7 @@ namespace AlmostFreeVeturilo.Logic
                 {
                     var input = ChooseInputData(db);
 
-                    var matrix = await new GoogleProxy().GetConnectionMatrix(input.origins.Select(x => (x.Lat, x.Lng)), input.destinations.Select(x => (x.Lat, x.Lng)));
+                    var matrix = await GoogleProxy.Instance.GetConnectionMatrix(input.origins.Select(x => (x.Lat, x.Lng)), input.destinations.Select(x => (x.Lat, x.Lng)));
                     var connections = SaveData(matrix, input.origins, input.destinations);
 
                     if (connections.Count == 0)
