@@ -14,21 +14,24 @@ namespace AlmostFreeVeturilo.Logic
         {
             var usefulStations = await GetStationsWithBikes();
 
-            return MockGetDistances(usefulStations.OrderBy(x => MathF.Pow(x.Lat - lat, 2) + MathF.Pow(x.Lng - lng, 2)).Take(Common.MaxMatrixRequest));
+            var takenStations = usefulStations.OrderBy(x => MathF.Pow(x.Lat - lat, 2) + MathF.Pow(x.Lng - lng, 2)).Take(Common.MaxMatrixRequest);
+            return await MockGetDistances(lat, lng, takenStations);
         }
 
-        private List<PathPart> MockGetDistances(IEnumerable<PathPart> parts)
+        private async Task<List<PathPart>> MockGetDistances(float lat, float lng, IEnumerable<PathPart> parts)
         {
             var stations = parts.ToList();
 
-            var mock = new ConnectionMatrix();
-            if (mock.status != "OK")
-                return null;
+            var origins = new List<(float lat, float lng)> { (lat, lng) };
+            var destinations = stations.Select(x => (x.Lat, x.Lng));
 
+            var connectionMatrix = await new GoogleProxy().GetConnectionMatrix(origins, destinations);
+            if (connectionMatrix.status != "OK")
+                return null;
 
             for (int i = 0; i < stations.Count; i++)
             {
-                var el = mock.rows[0].elements[i];
+                var el = connectionMatrix.rows[0].elements[i];
 
                 stations[i].Distance = el.distance.value;
                 stations[i].Time = el.duration.value;
