@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace AFVTry.Models.RequestModels
+namespace AlmostFreeVeturilo.Logic.GoogleApi
 {
     public class Distance
     {

@@ -1,6 +1,6 @@
-﻿using AFVTry.Models.RequestModels;
+﻿using AlmostFreeVeturilo.Logic.VeturiloApi;
 
-namespace AFVTry.Models.DatabaseModels
+namespace AlmostFreeVeturilo.Models.DatabaseModels
 {
     public class Station
     {

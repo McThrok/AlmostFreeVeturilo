@@ -1,18 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Net.Http;
-using System.Net.Http.Headers;
-using System.Text;
+﻿using System.Net.Http;
 using System.Threading.Tasks;
-using AFVTry.DataAccess;
-using AFVTry.Logic;
+using AlmostFreeVeturilo.Logic;
 using Microsoft.AspNetCore.Mvc;
-using AFVTry.Models;
-using Newtonsoft.Json;
 
-namespace AFVTry.Controllers
+namespace AlmostFreeVeturilo.Controllers
 {
     public class AdminController : Controller
     {

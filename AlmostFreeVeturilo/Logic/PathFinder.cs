@@ -1,15 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Runtime.InteropServices.ComTypes;
 using System.Threading.Tasks;
-using AFVTry.DataAccess;
-using AFVTry.Models;
-using AFVTry.Models.DatabaseModels;
-using AFVTry.Models.RequestModels;
-using Microsoft.EntityFrameworkCore.Infrastructure;
+using AlmostFreeVeturilo.Logic.GoogleApi;
+using AlmostFreeVeturilo.Logic.VeturiloApi;
+using AlmostFreeVeturilo.Models;
 
-namespace AFVTry.Logic
+namespace AlmostFreeVeturilo.Logic
 {
     public class PathFinder
     {

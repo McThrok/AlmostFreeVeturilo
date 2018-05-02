@@ -1,4 +1,4 @@
-﻿namespace AFVTry.Models.DatabaseModels
+﻿namespace AlmostFreeVeturilo.Models.DatabaseModels
 {
     public class Connection
     {

@@ -1,12 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
-using AFVTry.Models.RequestModels;
 using Newtonsoft.Json;
 
-namespace AFVTry.Logic
+namespace AlmostFreeVeturilo.Logic.GoogleApi
 {
     public class GoogleProxy
     {

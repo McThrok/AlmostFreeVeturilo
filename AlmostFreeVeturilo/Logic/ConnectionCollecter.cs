@@ -1,17 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Net.Http;
 using System.Threading.Tasks;
-using AFVTry.DataAccess;
-using AFVTry.Models;
-using AFVTry.Models.DatabaseModels;
-using AFVTry.Models.RequestModels;
-using Microsoft.EntityFrameworkCore;
-using Newtonsoft.Json;
+using AlmostFreeVeturilo.DataAccess;
+using AlmostFreeVeturilo.Logic.GoogleApi;
+using AlmostFreeVeturilo.Models.DatabaseModels;
 
-namespace AFVTry.Logic
+namespace AlmostFreeVeturilo.Logic
 {
     public class ConnectionCollecter
     {
@@ -25,7 +19,7 @@ namespace AFVTry.Logic
                 {
                     var input = ChooseInputData(db);
 
-                    var matrix = await new GoogleProxy().GetConnectionMatrix(input.origins.Select(x => (x.Lat, x.Lng)),input.destinations.Select(x => (x.Lat, x.Lng)));
+                    var matrix = await new GoogleProxy().GetConnectionMatrix(input.origins.Select(x => (x.Lat, x.Lng)), input.destinations.Select(x => (x.Lat, x.Lng)));
                     var connections = SaveData(matrix, input.origins, input.destinations);
 
                     if (connections.Count == 0)
@@ -88,9 +82,9 @@ namespace AFVTry.Logic
 
             return (origins, destinations);
         }
-        private List<Connection_old> SaveData(ConnectionMatrix matrix, List<Station> origins, List<Station> destinations)
+        private List<ConnectionOld> SaveData(ConnectionMatrix matrix, List<Station> origins, List<Station> destinations)
         {
-            var connections = new List<Connection_old>();
+            var connections = new List<ConnectionOld>();
 
             if (matrix.status != "OK")
                 return connections;
@@ -100,7 +94,7 @@ namespace AFVTry.Logic
                 for (int j = 0; j < destinations.Count; j++)
                 {
                     var el = matrix.rows[i].elements[j];
-                    connections.Add(new Connection_old
+                    connections.Add(new ConnectionOld
                     {
                         Distance = el.distance.value,
                         Time = el.duration.value,

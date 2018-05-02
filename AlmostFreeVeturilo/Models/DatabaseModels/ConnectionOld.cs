@@ -1,6 +1,6 @@
-﻿namespace AFVTry.Models.DatabaseModels
+﻿namespace AlmostFreeVeturilo.Models.DatabaseModels
 {
-    public class Connection_old
+    public class ConnectionOld
     {
         public int Id { get; set; }
         public Station StationFrom { get; set; } // lower Uid
