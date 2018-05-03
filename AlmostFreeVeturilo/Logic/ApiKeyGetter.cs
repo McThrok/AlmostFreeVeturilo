@@ -6,7 +6,7 @@
         public static ApiKeyGetter Instance => _instance ?? (_instance = new ApiKeyGetter());
         private ApiKeyGetter() { }
 
-        private int _index = 0;
+        private int _index;
         private readonly string[] _apiKeys =
         {
             "AIzaSyDdEzYrifjID-xf3EdiB6eNLjpKmYhL-aA",
@@ -23,7 +23,7 @@
         
         public string GetKey()
         {
-            return _apiKeys[(++_index) % _apiKeys.Length];
+            return _apiKeys[_index++ % _apiKeys.Length];
         }
     }
 }

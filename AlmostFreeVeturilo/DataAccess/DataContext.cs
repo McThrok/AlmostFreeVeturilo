@@ -6,7 +6,7 @@ namespace AlmostFreeVeturilo.DataAccess
     public class DataContext : DbContext
     {
         public DbSet<Station> Stations { get; set; }
-        public DbSet<ConnectionOld> Connections { get; set; }
+        public DbSet<Connection> Connections { get; set; }
 
         public DataContext()
         {

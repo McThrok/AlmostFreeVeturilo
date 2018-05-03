@@ -10,7 +10,7 @@ namespace AlmostFreeVeturilo.Controllers
         //public async Task LoadStaionsData()
         public async Task Index()
         {
-            await new ConnectionCollecter().LoadData();
+          //  await new ConnectionCollecter().LoadData();
         }
 
 
