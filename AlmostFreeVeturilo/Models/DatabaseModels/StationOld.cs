@@ -2,13 +2,13 @@
 
 namespace AlmostFreeVeturilo.Models.DatabaseModels
 {
-    public class Station
+    public class StationOld
     {
-        public Station()
+        public StationOld()
         {
         }
 
-        public Station(Place place)
+        public StationOld(Place place)
         {
             Uid = place.uid;
             Lat = (float)place.lat;

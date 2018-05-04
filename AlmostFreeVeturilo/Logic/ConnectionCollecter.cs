@@ -32,7 +32,7 @@
 
 //        }
 
-//        private (List<Station> origins, List<Station> destinations) ChooseInputData(DataContext db)
+//        private (List<StationOld> origins, List<StationOld> destinations) ChooseInputData(DataContext db)
 //        {
 //            var stations = db.Stations.ToList();
 //            var isConnectionQuery = db.Stations.Select(
@@ -41,8 +41,8 @@
 //                       ).ToList()
 //                   ).ToList();
 
-//            var origins = new List<Station>();
-//            var destinations = new List<Station>();
+//            var origins = new List<StationOld>();
+//            var destinations = new List<StationOld>();
 
 //            int[] count = { 0, 0, 0 };
 //            foreach (var row in isConnectionQuery)
@@ -82,7 +82,7 @@
 
 //            return (origins, destinations);
 //        }
-//        private List<ConnectionOld> SaveData(ConnectionMatrix matrix, List<Station> origins, List<Station> destinations)
+//        private List<ConnectionOld> SaveData(ConnectionMatrix matrix, List<StationOld> origins, List<StationOld> destinations)
 //        {
 //            var connections = new List<ConnectionOld>();
 
