@@ -57,7 +57,7 @@
                     dataType: "json",
                     success: function (data) {
 
-                        var currentLocationMarker = createMarker(lat, lng, "You are here", "red");
+                        var currentLocationMarker = createMarker(lat, lng, "You are here", "green");
                         var startStationsMarkers = [];
 
                         data.forEach(function (station) {
@@ -68,9 +68,7 @@
                                 startStationsMarkers.forEach(function (m) { m.setMap(null) });
                                 startStationsMarkers.length = 0;
 
-                                currentLocationMarker.setMap(null);
-
-                                showChosenStation(station.uid, station.lat, station.lng);
+                                showChosenStation(currentLocationMarker, station.uid, station.lat, station.lng);
                             });
                         });
 
@@ -78,42 +76,37 @@
                 });
             }
 
-            function showChosenStation(uid, lat, lng) {
-                var chosenStationMarker = createMarker(lat, lng, "qwe", "green");
+            function showChosenStation(currLocMarker, uid, lat, lng) {
+                var chosenStationMarker = createMarker(lat, lng, "qwe", "blue");
+
                 map.addListener('click', function (e) {
-                    chosenStationMarker.setMap(null);
-                    showPath(uid, e.latLng.lat(), e.latLng.lng());
+                    var endLocMarker = createMarker(e.latLng.lat(), e.latLng.lng(), "qwe", "red");
+
+                    $.ajax({
+                        url: "http://localhost:50588/api/Path/" + uid + "/" + e.latLng.lat() + "/" + e.latLng.lng(),
+                        dataType: "json",
+                        success: function (data) {
+                            var pathMarkers = [];
+                            pathMarkers.push(chosenStationMarker);
+                            data.forEach(function (station, index) {
+                                if (index !== 0)
+                                    pathMarkers.push(createMarker(station.lat, station.lng, "qwe", "blue"));
+                            });
+
+                            activeteStartListening();
+                            map.addListener('click', function fun(e) {
+                                //  removeEventListener('click', fun);
+                                pathMarkers.forEach(function (m) { m.setMap(null) });
+                                pathMarkers.length = 0;
+                                currLocMarker.setMap(null);
+                                endLocMarker.setMap(null);
+
+                            });
+
+                        }
+                    });
                 });
             }
-
-            function showPath(uid, lat, lng) {
-
-                console.log("http://localhost:50588/api/Path/" + uid + "/" + lat + "/" + lng);
-                $.ajax({
-                    url: "http://localhost:50588/api/Path/" + uid + "/" + lat + "/" + lng,
-                    dataType: "json",
-                    success: function (data) {
-                        console.log(data);
-                        var pathMarkers = [];
-                        data.forEach(function (station, index, array) {
-                            var color = "blue";
-                            if (index === 0) color = "green";
-                            if (index === array.length - 1) color = "red";
-
-                            pathMarkers.push(createMarker(station.lat, station.lng, "qwe", color));
-                        });
-
-                        activeteStartListening();
-                        map.addListener('click', function fun(e) {
-                            //  removeEventListener('click', fun);
-                            pathMarkers.forEach(function (m) { m.setMap(null) });
-                            pathMarkers.length = 0;
-                        });
-
-                    }
-                });
-            }
-
         }
     </script>
     <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyD5xOvCNg3_pQsPgJ-Ies5cni5noiPeKPs&callback=initMap"

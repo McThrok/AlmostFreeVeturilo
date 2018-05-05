@@ -60,7 +60,6 @@ namespace AlmostFreeVeturilo.Logic
             return veturiloPath;
         }
 
-        private List<PathPart> c;
         private EdgeCollection GetEdges(IEnumerable<Connection> connections)
         {
             var result = new EdgeCollection();
