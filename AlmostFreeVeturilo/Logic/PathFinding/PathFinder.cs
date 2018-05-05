@@ -67,10 +67,8 @@ namespace AlmostFreeVeturilo.Logic
 
             foreach (var connection in connections)
             {
-                var weight = MathF.Max(0, connection.Time + Common.ChangeBikePenalty - Common.FreeVeturiloTime) + Common.ChangeBikePenalty;
-                //var from = c.First(x=>x.Uid == connection.StationFromUid);
-                //var to = c.First(x => x.Uid == connection.StationToUid);
-                //var weight = MathF.Pow(from.Lat - to.Lat, 2) + MathF.Pow(from.Lng - to.Lng, 2);
+                var time = (connection.Time + Common.ChangeBikeTime) * Common.TimeFactor;
+                var weight = MathF.Max(0, time - Common.FreeVeturiloTime) + Common.ChangeBikePenalty;
                 result.AddEdge(connection.StationFromUid, connection.StationToUid, weight);
             }
 
