@@ -19,5 +19,10 @@
             Lat = lat;
             Lng = lng;
         }
+
+        public PathPart(int uid, float lat, float lng, int bikes):this(uid,lat,lng)
+        {
+            Bikes = bikes;
+        }
     }
 }

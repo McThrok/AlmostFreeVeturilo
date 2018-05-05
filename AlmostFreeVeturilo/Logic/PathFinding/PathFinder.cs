@@ -20,8 +20,8 @@ namespace AlmostFreeVeturilo.Logic
 
             var usefulStations = await GetStations(true);
             var takenStations = usefulStations.OrderBy(x => MathF.Pow(x.Lat - lat, 2) + MathF.Pow(x.Lng - lng, 2)).Take(Common.MaxMatrixRequest);
-
-            return await FillDistances(lat, lng, takenStations);
+            var stationWithDistances = await FillDistances(lat, lng, takenStations);
+            return stationWithDistances.OrderBy(x => x.Distance).Take(Common.StartStationsNumber).ToList();
         }
         private async Task<List<PathPart>> FillDistances(float lat, float lng, IEnumerable<PathPart> parts)
         {
@@ -42,7 +42,7 @@ namespace AlmostFreeVeturilo.Logic
                 stations[i].Time = el.duration.value;
             }
 
-            return stations.OrderBy(x => x.Distance).ToList();
+            return stations;
         }
 
         public async Task<List<PathPart>> GetPath(int startUid, float lat, float lng)
@@ -51,7 +51,7 @@ namespace AlmostFreeVeturilo.Logic
 
             var usefulStations = (await GetStations(true, new[] { startUid, end.Uid })).ToList();
 
-            var edges = GetEdges(GetConnections(usefulStations.Select(x => x.Uid), end.Uid));
+            var edges = GetEdges(GetConnections(usefulStations.Select(x => x.Uid)));
             var path = new Graph(edges).GetShortestPath(startUid, end.Uid);
 
             var veturiloPath = path.Take(path.Count - 1).Select(uid => usefulStations.First(x => x.Uid == uid)).ToList();
@@ -59,6 +59,8 @@ namespace AlmostFreeVeturilo.Logic
 
             return veturiloPath;
         }
+
+        private List<PathPart> c;
         private EdgeCollection GetEdges(IEnumerable<Connection> connections)
         {
             var result = new EdgeCollection();
@@ -66,19 +68,22 @@ namespace AlmostFreeVeturilo.Logic
             foreach (var connection in connections)
             {
                 var weight = MathF.Max(0, connection.Time + Common.ChangeBikePenalty - Common.FreeVeturiloTime) + Common.ChangeBikePenalty;
+                //var from = c.First(x=>x.Uid == connection.StationFromUid);
+                //var to = c.First(x => x.Uid == connection.StationToUid);
+                //var weight = MathF.Pow(from.Lat - to.Lat, 2) + MathF.Pow(from.Lng - to.Lng, 2);
                 result.AddEdge(connection.StationFromUid, connection.StationToUid, weight);
             }
 
             return result;
         }
-        private IEnumerable<Connection> GetConnections(IEnumerable<int> uids, int endUid)
+        private List<Connection> GetConnections(IEnumerable<int> uids)
         {
-            IEnumerable<Connection> connections = null;
+            List<Connection> connections = null;
             using (var db = new DataContext())
             {
-                connections = db.Connections.Where(x =>
-                    uids.Contains(x.StationFromUid) && uids.Contains(x.StationToUid) ||
-                     x.StationToUid == endUid && x.StationFromUid == endUid);
+                connections = db.Connections
+                    .Where(x => uids.Contains(x.StationFromUid) && uids.Contains(x.StationToUid))
+                    .ToList();
             }
             return connections;
         }
@@ -97,8 +102,8 @@ namespace AlmostFreeVeturilo.Logic
             var places = await VeturiloProxy.Instance.GetVeturiloPlaces();
             var result = places.Where
                 (x => !withBikes || x.bikes >= Common.MinBikesOnStation
-                                 || forcedUids == null || forcedUids.Contains(x.uid))
-                .Select(x => new PathPart(x.uid, (float)x.lat, (float)x.lng));
+                                 || forcedUids != null && forcedUids.Contains(x.uid))
+                .Select(x => new PathPart(x.uid, (float)x.lat, (float)x.lng, x.bikes));
             return result;
         }
 

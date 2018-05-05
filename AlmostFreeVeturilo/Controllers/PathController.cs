@@ -14,7 +14,7 @@ namespace AlmostFreeVeturilo.Controllers
     [Route("api/Path")]
     public class PathController : Controller
     {
-        private PathFinder _pathFinder = new PathFinder();
+        private readonly PathFinder _pathFinder = new PathFinder();
 
         [HttpGet("{lat}/{lng}")]
         public async Task<List<PathPart>> Get(float lat, float lng)
