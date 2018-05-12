@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace AlmostFreeVeturilo.Logic
@@ -33,9 +34,14 @@ namespace AlmostFreeVeturilo.Logic
 
                 foreach (var vert in vertsToUse)
                 {
-                    var newDistance = distances[minVert] + _edges.GetWeight(vertsToUse[minVert], vertsToUse[vert]);
+                    if(vert==215 && minVert == 215)
+                    { }
+                    var newDistance = distances[minVert] + _edges.GetWeight(_vertices[minVert], _vertices[vert]);
                     if (distances[vert] > newDistance)
+                    {
                         distances[vert] = newDistance;
+                        previous[vert] = minVert;
+                    }
                 }
             }
 
@@ -56,7 +62,7 @@ namespace AlmostFreeVeturilo.Logic
 
             var startVert = _vertices.IndexOf(start);
             distances[startVert] = 0;
-            previous[startVert] = startVert;
+            //previous[startVert] = startVert;
 
         }
 

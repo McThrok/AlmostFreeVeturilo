@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace AlmostFreeVeturilo.Logic
@@ -12,7 +13,7 @@ namespace AlmostFreeVeturilo.Logic
         {
             Adjust(ref from, ref to);
 
-            if(!_vertices.Contains(to))
+            if (!_vertices.Contains(to))
                 _vertices.Add(to);
 
             if (!_vertices.Contains(from))
