@@ -11,13 +11,13 @@ namespace AlmostFreeVeturilo.Logic.PathFinding
 {
     public class PathFinder : BaseFinder
     {
-        public async Task<VeturiloPath> GetPath(int startUid, float lat, float lng)
+        public async Task<VeturiloPath> GetPath(int startUid, float lat, float lng, int minBikes, float timeFactor)
         {
             var end = await GetEndStation(lat, lng);
 
-            var usefulStations = (await GetStations(true, new[] { startUid, end.Station.Uid })).ToList();
+            var usefulStations = (await GetStations(minBikes, new[] { startUid, end.Station.Uid })).ToList();
 
-            var edges = GetEdges(GetConnections(usefulStations.Select(x => x.Uid)));
+            var edges = GetEdges(GetConnections(usefulStations.Select(x => x.Uid)), timeFactor);
             var path = new Graph(edges).GetShortestPath(startUid, end.Station.Uid);
 
             var stationList = path.uids.Select(uid => usefulStations.First(x => x.Uid == uid)).ToList();
@@ -25,13 +25,13 @@ namespace AlmostFreeVeturilo.Logic.PathFinding
             return new VeturiloPath(stationList, path.cost);
         }
 
-        private EdgeCollection GetEdges(IEnumerable<Connection> connections)
+        private EdgeCollection GetEdges(IEnumerable<Connection> connections, float timeFactor)
         {
             var result = new EdgeCollection();
 
             foreach (var connection in connections)
             {
-                var time = (connection.Time + Common.ChangeBikeTime) * Common.TimeFactor;
+                var time = (connection.Time + Common.ChangeBikeTime) * timeFactor;
                 result.AddEdge(connection.StationFromUid, connection.StationToUid, GetCost(time));
             }
 

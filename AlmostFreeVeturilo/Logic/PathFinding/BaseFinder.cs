@@ -27,12 +27,11 @@ namespace AlmostFreeVeturilo.Logic.PathFinding
 
             return result;
         }
-        protected async Task<IEnumerable<Station>> GetStations(bool withBikes, IEnumerable<int> forcedUids = null)
+        protected async Task<IEnumerable<Station>> GetStations(int minBikes, IEnumerable<int> forcedUids = null)
         {
             var places = await VeturiloProxy.Instance.GetVeturiloPlaces();
             var result = places.Where
-                (x => !withBikes || x.bikes >= Common.MinBikesOnStation
-                                 || forcedUids != null && forcedUids.Contains(x.uid))
+                (x => x.bikes >= minBikes || forcedUids != null && forcedUids.Contains(x.uid))
                 .Select(x => new Station(x.uid, (float)x.lat, (float)x.lng, x.bikes));
             return result;
         }

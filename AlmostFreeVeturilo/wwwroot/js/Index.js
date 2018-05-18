@@ -8,6 +8,9 @@ var pathMarkers = [];
 var endLocMarker;
 var currentLocationMarker;
 
+var minBikesOnStation = 3;
+var timeFactor = 3;
+
 function initMap() {
     map = new google.maps.Map(document.getElementById('map'),
         {
@@ -59,7 +62,7 @@ function initMap() {
 
     function showStartStations(lat, lng) {
         $.ajax({
-            url: "http://localhost:50588/api/Path/" + lat + "/" + lng,
+            url: "http://localhost:50588/api/Path/" + lat + "/" + lng + "/" + minBikesOnStation,
             dataType: "json",
             success: function (data) {
                 currentLocationMarker = createMarker(lat, lng, "Start point", "green");
@@ -93,7 +96,7 @@ function initMap() {
             endLocMarker = createMarker(e.latLng.lat(), e.latLng.lng(), "qwe", "red");
 
             $.ajax({
-                url: "http://localhost:50588/api/Path/" + uid + "/" + e.latLng.lat() + "/" + e.latLng.lng(),
+                url: "http://localhost:50588/api/Path/" + uid + "/" + e.latLng.lat() + "/" + e.latLng.lng() + "/" + minBikesOnStation + "/" + timeFactor,
                 dataType: "json",
                 success: function (data) {
                     pathMarkers.push(chosenStationMarker);
