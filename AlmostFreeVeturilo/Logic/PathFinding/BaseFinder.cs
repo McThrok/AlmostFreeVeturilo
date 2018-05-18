@@ -31,7 +31,8 @@ namespace AlmostFreeVeturilo.Logic.PathFinding
         {
             var places = await VeturiloProxy.Instance.GetVeturiloPlaces();
             var result = places.Where
-                (x => x.bikes >= minBikes || forcedUids != null && forcedUids.Contains(x.uid))
+                (x => x.bike_list.Count(b => b.bike_type == 4 && b.state=="ok") >= minBikes
+                      || forcedUids != null && forcedUids.Contains(x.uid))
                 .Select(x => new Station(x.uid, (float)x.lat, (float)x.lng, x.bikes, x.name));
             return result;
         }
