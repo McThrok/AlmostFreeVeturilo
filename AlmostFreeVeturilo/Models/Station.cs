@@ -6,6 +6,7 @@ namespace AlmostFreeVeturilo.Models
     public class Station
     {
         public int Uid { get; set; }
+        public string Name { get; set; }
         public float Lat { get; set; }
         public float Lng { get; set; }
         public int Bikes { get; set; }
@@ -21,13 +22,14 @@ namespace AlmostFreeVeturilo.Models
             Lng = lng;
         }
 
-        public Station(int uid, float lat, float lng, int bikes) : this(uid, lat, lng)
+        public Station(int uid, float lat, float lng, int bikes, string name) : this(uid, lat, lng)
         {
             Bikes = bikes;
+            Name = name;
         }
 
 
-        public Station(Place place) : this(place.uid, (float)place.lat, (float)place.lng, place.bikes)
+        public Station(Place place) : this(place.uid, (float)place.lat, (float)place.lng, place.bikes, place.name)
         {
         }
     }

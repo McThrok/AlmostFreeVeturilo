@@ -15,7 +15,7 @@ namespace AlmostFreeVeturilo.Logic.PathFinding
             var origins = new List<(float lat, float lng)> { (lat, lng) };
             var destinations = stations.Select(x => (x.Lat, x.Lng));
 
-            var connectionMatrix = await GoogleProxy.Instance.GetConnectionMatrix(origins, destinations, false);
+            var connectionMatrix = await new GoogleProxy().GetConnectionMatrix(origins, destinations, false);
             if (connectionMatrix.status != "OK")
                 return null;
 
@@ -32,7 +32,7 @@ namespace AlmostFreeVeturilo.Logic.PathFinding
             var places = await VeturiloProxy.Instance.GetVeturiloPlaces();
             var result = places.Where
                 (x => x.bikes >= minBikes || forcedUids != null && forcedUids.Contains(x.uid))
-                .Select(x => new Station(x.uid, (float)x.lat, (float)x.lng, x.bikes));
+                .Select(x => new Station(x.uid, (float)x.lat, (float)x.lng, x.bikes, x.name));
             return result;
         }
 
