@@ -2,27 +2,20 @@
 {
     public class PathPart
     {
-        public int Uid { get; set; }
-        public float Lat { get; set; }
-        public float Lng { get; set; }
-        public int Bikes { get; set; }
         public float Distance { get; set; }
         public float Time { get; set; }
+        public float EstimatedCost { get; set; }
+        public Station Station { get; set; }
 
         public PathPart()
         {
         }
 
-        public PathPart(int uid, float lat, float lng)
+        public PathPart(float time, float distance, Station station)
         {
-            Uid = uid;
-            Lat = lat;
-            Lng = lng;
-        }
-
-        public PathPart(int uid, float lat, float lng, int bikes):this(uid,lat,lng)
-        {
-            Bikes = bikes;
+            Time = time;
+            Distance = distance;
+            Station = station;
         }
     }
 }

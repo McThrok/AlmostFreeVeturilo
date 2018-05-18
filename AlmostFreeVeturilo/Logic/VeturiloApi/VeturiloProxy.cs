@@ -43,5 +43,7 @@ namespace AlmostFreeVeturilo.Logic.VeturiloApi
             var data = await GetVeturiloData();
             return data.countries.First().cities.First().places;
         }
+
+       
     }
 }
