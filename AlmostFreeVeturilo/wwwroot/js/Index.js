@@ -22,9 +22,9 @@ function initMap() {
     var destination = document.getElementById("destination");
 
     var reset = document.getElementById("reset");
-    reset.onclick = function () {
+    reset.onclick = function() {
         activeteStartListening();
-        pathMarkers.forEach(function (m) { m.setMap(null) });
+        pathMarkers.forEach(function(m) { m.setMap(null); });
         pathMarkers.length = 0;
 
         endLocMarker.setMap(null);
@@ -36,7 +36,7 @@ function initMap() {
 
         firstStation.classList.add(LOCKED);
         destination.classList.add(LOCKED);
-    }
+    };
 
     function createMarker(lat, lng, name, iconColor) {
         return marker = new google.maps.Marker({
@@ -62,16 +62,16 @@ function initMap() {
             url: "http://localhost:50588/api/Path/" + lat + "/" + lng,
             dataType: "json",
             success: function (data) {
-
                 currentLocationMarker = createMarker(lat, lng, "Start point", "green");
                 var startStationsMarkers = [];
 
-                data.forEach(function (station) {
+                data.forEach(function (pathPart) {
+                    var station = pathPart.station;
                     var marker = createMarker(station.lat, station.lng, "qwe", "yellow");
                     startStationsMarkers.push(marker);
 
                     marker.addListener('click', function () {
-                        startStationsMarkers.forEach(function (m) { m.setMap(null) });
+                        startStationsMarkers.forEach(function (m) { m.setMap(null); });
                         startStationsMarkers.length = 0;
 
                         showChosenStation(currentLocationMarker, station.uid, station.lat, station.lng);
@@ -97,7 +97,7 @@ function initMap() {
                 dataType: "json",
                 success: function (data) {
                     pathMarkers.push(chosenStationMarker);
-                    data.forEach(function (station, index) {
+                    data.stations.forEach(function (station, index) {
                         if (index !== 0)
                             pathMarkers.push(createMarker(station.lat, station.lng, "qwe", "blue"));
                     });

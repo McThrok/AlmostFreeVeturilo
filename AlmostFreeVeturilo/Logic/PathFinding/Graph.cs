@@ -73,14 +73,15 @@ namespace AlmostFreeVeturilo.Logic
             var v = _vertices.IndexOf(end);
             while (v != -1)
             {
-                path.Add(_vertices[v]);
+                path.Add(v);
                 v = previous[v];
             }
             path.Reverse();
+            
+            var cost = path.Skip(1).Select(vert => _edges.GetWeight(_vertices[previous[vert]], _vertices[vert])).Sum();
+            var uids = path.Select(vert => _vertices[vert]).ToList();
 
-            var paidTime = path.Select(vert => _edges.GetWeight(previous[vert], vert)).Sum();
-
-            return (path, paidTime);
+            return (uids, cost);
         }
     }
 }

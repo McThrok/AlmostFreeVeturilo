@@ -13,7 +13,7 @@ using Newtonsoft.Json;
 
 namespace AlmostFreeVeturilo.Logic
 {
-    public class PathFinder:BaseFinder
+    public class PathFinder : BaseFinder
     {
         public async Task<VeturiloPath> GetPath(int startUid, float lat, float lng)
         {
@@ -28,7 +28,7 @@ namespace AlmostFreeVeturilo.Logic
 
             return new VeturiloPath(stationList, path.cost);
         }
-       
+
         private EdgeCollection GetEdges(IEnumerable<Connection> connections)
         {
             var result = new EdgeCollection();
