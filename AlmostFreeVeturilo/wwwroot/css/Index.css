@@ -1,0 +1,86 @@
+﻿#map {
+    height: 100%;
+}
+
+html, body {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+}
+
+#reset {
+    position: fixed;
+    left: 120px;
+    top: 8px;
+    padding: 8px;
+    color: dimgray;
+    background-color: white;
+    border-radius: 3px;
+    border-style: solid;
+    border-width: 1px;
+    border-color: lightgray;
+}
+
+    #reset:hover {
+        background-color: ghostwhite;
+        border-color: lightslategrey;
+    }
+
+#info {
+    position: fixed;
+    left: 30px;
+    top: 50px;
+    width: 160px;
+}
+
+    #info .menuBlock {
+        width: 100%;
+        background-color: white;
+        padding-top: 14px;
+        padding-left: 15px;
+        padding-right: 15px;
+        border-radius: 5px;
+        border-color: lightgray;
+        border-width: 1px;
+        border-style: solid;
+        font-size: 20px;
+        color: dimgray;
+        vertical-align: middle;
+    }
+
+        #info .menuBlock p {
+            font-size: 16px;
+        }
+
+        #info .menuBlock.done:before {
+            content: "☑️";
+        }
+
+        #info .menuBlock.done {
+            height: 44px;
+            opacity: 0.6;
+        }
+
+            #info .menuBlock.done p {
+                display: none;
+            }
+
+        #info .menuBlock.locked {
+            height: 44px;
+            opacity: 0.6;
+        }
+
+            #info .menuBlock.locked p {
+                display: none;
+            }
+
+    #info #startPoint {
+    }
+
+    #info #firstStation {
+        margin-top: 4px;
+    }
+
+    #info #destination {
+        margin-top: 4px;
+    }
