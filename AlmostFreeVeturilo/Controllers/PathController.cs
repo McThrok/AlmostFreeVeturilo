@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using AlmostFreeVeturilo.Logic;
+using AlmostFreeVeturilo.Logic.PathFinding;
 using AlmostFreeVeturilo.Logic.VeturiloApi;
 using AlmostFreeVeturilo.Models;
 using Microsoft.AspNetCore.Http;

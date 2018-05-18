@@ -2,16 +2,12 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using System.Xml;
 using AlmostFreeVeturilo.DataAccess;
-using AlmostFreeVeturilo.Logic.GoogleApi;
 using AlmostFreeVeturilo.Logic.VeturiloApi;
 using AlmostFreeVeturilo.Models;
 using AlmostFreeVeturilo.Models.DatabaseModels;
-using Microsoft.EntityFrameworkCore;
-using Newtonsoft.Json;
 
-namespace AlmostFreeVeturilo.Logic
+namespace AlmostFreeVeturilo.Logic.PathFinding
 {
     public class PathFinder : BaseFinder
     {
