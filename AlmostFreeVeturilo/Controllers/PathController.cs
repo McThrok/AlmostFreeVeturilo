@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using AlmostFreeVeturilo.Logic;
+using AlmostFreeVeturilo.Logic.PathFinding;
+using AlmostFreeVeturilo.Logic.VeturiloApi;
 using AlmostFreeVeturilo.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -10,22 +12,30 @@ using Microsoft.AspNetCore.Mvc.Internal;
 
 namespace AlmostFreeVeturilo.Controllers
 {
-    //[Produces("application/json")]
     [Route("api/Path")]
     public class PathController : Controller
     {
         private readonly PathFinder _pathFinder = new PathFinder();
-
-        [HttpGet("{lat}/{lng}")]
-        public async Task<List<PathPart>> Get(float lat, float lng)
+        private readonly StartStationsFinder _startStationsFinder = new StartStationsFinder();
+      
+        [HttpGet("{lat}/{lng}/{minBikes}")]
+        public async Task<List<PathPart>> GetStartStations(float lat, float lng, int minBikes)
         {
-            return await _pathFinder.GetStartStations(lat, lng);
+            return await _startStationsFinder.GetStartStations(lat, lng, minBikes);
         }
 
-        [HttpGet("{uid}/{lat}/{lng}")]
-        public async Task<List<PathPart>> Get(int uid, float lat, float lng)
+        [HttpGet("{uid}/{lat}/{lng}/{minBikes}/{timeFactor}")]
+        public async Task<VeturiloPath> GetPath(int uid, float lat, float lng, int minBikes, float timeFactor)
         {
-            return await _pathFinder.GetPath(uid, lat, lng);
+            return await _pathFinder.GetPath(uid, lat, lng, minBikes, timeFactor);
+        }
+
+        [HttpGet("")]
+        public async Task<List<Station>> Get()
+        {
+            var places = await VeturiloProxy.Instance.GetVeturiloPlaces();
+            var stations = places.Select(p => new Station(p)).ToList();
+            return stations;
         }
     }
 }

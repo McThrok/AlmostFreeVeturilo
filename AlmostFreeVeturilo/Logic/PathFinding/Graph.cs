@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Xml;
 
 namespace AlmostFreeVeturilo.Logic
 {
@@ -15,7 +16,7 @@ namespace AlmostFreeVeturilo.Logic
             _vertices = _edges.GetVertices();
         }
 
-        public List<int> GetShortestPath(int start, int end)
+        public (List<int> uids, float cost) GetShortestPath(int start, int end)
         {
             PrepareTables(out var distances, out var previous, start);
 
@@ -66,18 +67,21 @@ namespace AlmostFreeVeturilo.Logic
 
         }
 
-        private List<int> GetPath(int[] previous, int end)
+        private (List<int> uids, float cost) GetPath(int[] previous, int end)
         {
             var path = new List<int>();
             var v = _vertices.IndexOf(end);
             while (v != -1)
             {
-                path.Add(_vertices[v]);
+                path.Add(v);
                 v = previous[v];
             }
             path.Reverse();
+            
+            var cost = path.Skip(1).Select(vert => _edges.GetWeight(_vertices[previous[vert]], _vertices[vert])).Sum();
+            var uids = path.Select(vert => _vertices[vert]).ToList();
 
-            return path;
+            return (uids, cost);
         }
     }
 }

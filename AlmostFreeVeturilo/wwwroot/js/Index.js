@@ -8,6 +8,9 @@ var pathMarkers = [];
 var endLocMarker;
 var currentLocationMarker;
 
+var minBikesOnStation = 3;
+var timeFactor = 3;
+
 function initMap() {
     map = new google.maps.Map(document.getElementById('map'),
         {
@@ -22,9 +25,9 @@ function initMap() {
     var destination = document.getElementById("destination");
 
     var reset = document.getElementById("reset");
-    reset.onclick = function () {
+    reset.onclick = function() {
         activeteStartListening();
-        pathMarkers.forEach(function (m) { m.setMap(null) });
+        pathMarkers.forEach(function(m) { m.setMap(null); });
         pathMarkers.length = 0;
 
         endLocMarker.setMap(null);
@@ -36,7 +39,7 @@ function initMap() {
 
         firstStation.classList.add(LOCKED);
         destination.classList.add(LOCKED);
-    }
+    };
 
     function createMarker(lat, lng, name, iconColor) {
         return marker = new google.maps.Marker({
@@ -59,19 +62,19 @@ function initMap() {
 
     function showStartStations(lat, lng) {
         $.ajax({
-            url: "http://localhost:50588/api/Path/" + lat + "/" + lng,
+            url: "http://localhost:50588/api/Path/" + lat + "/" + lng + "/" + minBikesOnStation,
             dataType: "json",
             success: function (data) {
-
                 currentLocationMarker = createMarker(lat, lng, "Start point", "green");
                 var startStationsMarkers = [];
 
-                data.forEach(function (station) {
+                data.forEach(function (pathPart) {
+                    var station = pathPart.station;
                     var marker = createMarker(station.lat, station.lng, "qwe", "yellow");
                     startStationsMarkers.push(marker);
 
                     marker.addListener('click', function () {
-                        startStationsMarkers.forEach(function (m) { m.setMap(null) });
+                        startStationsMarkers.forEach(function (m) { m.setMap(null); });
                         startStationsMarkers.length = 0;
 
                         showChosenStation(currentLocationMarker, station.uid, station.lat, station.lng);
@@ -93,11 +96,11 @@ function initMap() {
             endLocMarker = createMarker(e.latLng.lat(), e.latLng.lng(), "qwe", "red");
 
             $.ajax({
-                url: "http://localhost:50588/api/Path/" + uid + "/" + e.latLng.lat() + "/" + e.latLng.lng(),
+                url: "http://localhost:50588/api/Path/" + uid + "/" + e.latLng.lat() + "/" + e.latLng.lng() + "/" + minBikesOnStation + "/" + timeFactor,
                 dataType: "json",
                 success: function (data) {
                     pathMarkers.push(chosenStationMarker);
-                    data.forEach(function (station, index) {
+                    data.stations.forEach(function (station, index) {
                         if (index !== 0)
                             pathMarkers.push(createMarker(station.lat, station.lng, "qwe", "blue"));
                     });

@@ -19,19 +19,22 @@ namespace AlmostFreeVeturilo.Logic.VeturiloApi
 
         public async Task<VeturiloData> GetVeturiloData()
         {
-            if (DateTime.Now.Subtract(_cacheTime) < Common.CacheLivespan)
+            if (DateTime.Now.Subtract(_cacheTime) < Common.CacheLivespan && _dataCache != null)
                 return _dataCache;
 
             _cacheTime = DateTime.Now;
 
-            using (var client = new HttpClient())
+            while (_dataCache == null)
             {
-                var response = await client.GetAsync($"https://api.nextbike.net/maps/nextbike-official.json?city=210");
-
-                if (response.IsSuccessStatusCode)
+                using (var client = new HttpClient())
                 {
-                    var json = await response.Content.ReadAsStringAsync();
-                    _dataCache = JsonConvert.DeserializeObject<VeturiloData>(json);
+                    var response = await client.GetAsync($"https://api.nextbike.net/maps/nextbike-official.json?city=210");
+
+                    if (response.IsSuccessStatusCode)
+                    {
+                        var json = await response.Content.ReadAsStringAsync();
+                        _dataCache = JsonConvert.DeserializeObject<VeturiloData>(json);
+                    }
                 }
             }
 
@@ -43,5 +46,7 @@ namespace AlmostFreeVeturilo.Logic.VeturiloApi
             var data = await GetVeturiloData();
             return data.countries.First().cities.First().places;
         }
+
+
     }
 }
