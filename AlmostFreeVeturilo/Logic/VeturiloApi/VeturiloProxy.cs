@@ -24,7 +24,7 @@ namespace AlmostFreeVeturilo.Logic.VeturiloApi
 
             _cacheTime = DateTime.Now;
 
-            while (_dataCache == null)
+            while (_dataCache == null || _dataCache.countries.Count == 0)
             {
                 using (var client = new HttpClient())
                 {
