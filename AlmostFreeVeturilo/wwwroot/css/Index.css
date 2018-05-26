@@ -51,8 +51,8 @@ html, body {
 
 #settings {
     position: fixed;
-    left: 112px;
-    top: 65px;
+    left: 306px;
+    top: 8px;
     width: 160px;
     background-color: white;
     padding-left: 15px;
@@ -120,6 +120,9 @@ html, body {
         width: 0px;
     }
 
+    /*.base.locked:after{
+        opacity:0;
+    }*/
 .baseTextFromat {
     padding-top: 14px;
     padding-left: 5px;
@@ -147,7 +150,8 @@ html, body {
 }
 
     .done:before {
-        content: "☑️✅";
+        /*✅*/
+        content: "☑️";
     }
 /*.locked p{
     display:none;
