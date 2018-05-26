@@ -24,6 +24,27 @@ function initMap() {
     var firstStation = document.getElementById("firstStation");
     var destination = document.getElementById("destination");
 
+    // minBikesAtStationSlider
+    var minBikesAtStationSlider = document.getElementById("minBikesAtStationSlider");
+    var minBikesAtStationP = document.getElementById("minBikesAtStationP");
+    minBikesAtStationSlider.value = minBikesAtStation;
+    minBikesAtStationP.innerHTML = "Minimum bicycles at station: " + minBikesAtStation;
+
+    minBikesAtStationSlider.oninput = function () {
+        minBikesAtStation = this.value;
+        minBikesAtStationP.innerHTML = "Minimum bicycles at station: " + minBikesAtStation;
+    }
+    // timeFactorSlider
+    var timeFactorSlider = document.getElementById("timeFactorSlider");
+    var timeFactorP = document.getElementById("timeFactorP");
+    timeFactorSlider.value = timeFactor;
+    timeFactorP.innerHTML = "Time factor: " + timeFactor;
+
+    timeFactorSlider.oninput = function () {
+        timeFactor = this.value;
+        timeFactorP.innerHTML = "Time factor: " + timeFactor;
+    }
+    //
     var reset = document.getElementById("reset");
     reset.onclick = function() {
         activeteStartListening();
