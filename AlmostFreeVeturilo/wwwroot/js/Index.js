@@ -61,6 +61,9 @@ function initMap() {
 
         firstStation.classList.add(LOCKED);
         destination.classList.add(LOCKED);
+
+        cost.classList.add(LOCKED);
+        cost.innerHTML = "💰Estimated cost💰 --zł";
     };
 
     //TODO uncomment
@@ -170,7 +173,8 @@ function initMap() {
                         if (index !== 0)
                             pathMarkers.push(createMarker(station.lat, station.lng, station.name, station.bikes));
                     });
-
+                    cost.classList.remove(LOCKED);
+                    cost.innerHTML = "💰Estimated cost💰 " + data.cost + "zł";
                     //activeteStartListening();
                     //map.addListener('click', function fun(e) {
                     //    //  removeEventListener('click', fun);
