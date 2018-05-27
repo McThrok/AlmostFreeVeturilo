@@ -15,12 +15,20 @@ var timeFactor = 2;
 var stationMarkers = [];
 
 function initMap() {
+    var directionsService = new google.maps.DirectionsService;
+    var directionsDisplayStart = new google.maps.DirectionsRenderer({ suppressMarkers: true });
+    var directionsDisplayPath = new google.maps.DirectionsRenderer({ suppressMarkers: true });
+    var directionsDisplayEnd = new google.maps.DirectionsRenderer({ suppressMarkers: true });
+
     map = new google.maps.Map(document.getElementById('map'),
         {
             center: { lat: 52.226637920516765, lng: 21.006863639549124 },
             zoom: 15
         });
     activeteStartListening();
+    directionsDisplayStart.setMap(map);
+    directionsDisplayPath.setMap(map);
+    directionsDisplayEnd.setMap(map);
 
 
     var startPoint = document.getElementById("startPoint");
@@ -34,20 +42,20 @@ function initMap() {
     minBikesAtStationSlider.value = minBikesAtStation;
     minBikesAtStationP.innerHTML = "Minimum bicycles at station: " + minBikesAtStation;
 
-    minBikesAtStationSlider.oninput = function () {
+    minBikesAtStationSlider.oninput = function() {
         minBikesAtStation = this.value;
         minBikesAtStationP.innerHTML = "Minimum bicycles at station: " + minBikesAtStation;
-    }
+    };
     // timeFactorSlider
     var timeFactorSlider = document.getElementById("timeFactorSlider");
     var timeFactorP = document.getElementById("timeFactorP");
     timeFactorSlider.value = timeFactor;
     timeFactorP.innerHTML = "Time factor: " + timeFactor;
 
-    timeFactorSlider.oninput = function () {
+    timeFactorSlider.oninput = function() {
         timeFactor = this.value;
         timeFactorP.innerHTML = "Time factor: " + timeFactor;
-    }
+    };
     //
     var reset = document.getElementById("reset");
     reset.onclick = function () {
@@ -67,6 +75,10 @@ function initMap() {
 
         cost.classList.add(LOCKED);
         cost.innerHTML = "💰Estimated cost💰 --zł";
+
+        directionsDisplayStart.setDirections({ routes: [] });
+        directionsDisplayPath.setDirections({ routes: [] });
+        directionsDisplayEnd.setDirections({ routes: [] });
     };
 
     //TODO uncomment
@@ -84,33 +96,30 @@ function initMap() {
     });
 
     var hideStations = document.getElementById("hideStations");
-    console.log(hideStations);
-    hideStations.onclick = function () {
+    hideStations.onclick = function() {
         if (hideStations.checked) {
             for (var i = 0; i < stationMarkers.length; i++) {
                 stationMarkers[i].setMap(null);
             }
-        }
-        else {
-            console.log("un checked");
+        } else {
             for (var i = 0; i < stationMarkers.length; i++) {
                 stationMarkers[i].setMap(map);
             }
         }
-    }
+    };
 
     var settingsIcon = document.getElementById("settingsIcon");
     var settingsDiv = document.getElementById("settings");
     settingsDiv.style.display = "none";
-    settingsIcon.onclick = function () {
+    settingsIcon.onclick = function() {
         if (settingsDiv.style.display === "none")
             settingsDiv.style.display = "block";
         else
             settingsDiv.style.display = "none";
-    }
+    };
     // MARKERS
     function correctBikesCount(bikes) {
-        if (bikes == 0) bikes = "O";
+        if (bikes === 0) bikes = "O";
         if (bikes > 10) bikes = 10;
 
         return bikes;
@@ -194,6 +203,9 @@ function initMap() {
                     });
                     cost.classList.remove(LOCKED);
                     cost.innerHTML = "💰Estimated cost💰 " + data.cost + "zł";
+
+                    drawRoute();
+
                     //activeteStartListening();
                     //map.addListener('click', function fun(e) {
                     //    //  removeEventListener('click', fun);
@@ -207,5 +219,67 @@ function initMap() {
                 }
             });
         });
+    }
+
+    function drawRoute() {
+        drawStartWalk();
+        drawBikePath();
+        drawEndWalk();
+    }
+
+    function drawStartWalk() {
+        var destinationRoute = pathMarkers.length > 0 ? markerToLocation(pathMarkers[0]) : markerToLocation(endLocMarker);
+        directionsService.route({
+            origin: markerToLocation(currentLocationMarker),
+            destination: destinationRoute,
+            travelMode: 'WALKING'
+        }, function (response, status) {
+            if (status === 'OK')
+                directionsDisplayStart.setDirections(response);
+
+        });
+    }
+
+    function drawBikePath() {
+        if (pathMarkers.length < 2) return;
+
+        var waypts = [];
+        for (var i = 1; i < pathMarkers.length - 1; i++) {
+            waypts.push({
+                location: markerToLocation(pathMarkers[i]),
+                stopover: true
+            });
+
+        }
+
+        directionsService.route({
+            origin: markerToLocation(pathMarkers[0]),
+            waypoints: waypts,
+            destination: markerToLocation(pathMarkers[pathMarkers.length - 1]),
+            travelMode: 'BICYCLING'
+        }, function (response, status) {
+            if (status === 'OK')
+                directionsDisplayPath.setDirections(response);
+
+        });
+    }
+
+    function drawEndWalk() {
+        var originRoute = pathMarkers.length > 0 ? markerToLocation(pathMarkers[pathMarkers.length - 1]) : markerToLocation(currentLocationMarker);
+
+        directionsService.route({
+            origin: originRoute,
+            destination: markerToLocation(endLocMarker),
+            travelMode: 'WALKING'
+        }, function (response, status) {
+            if (status === 'OK')
+                directionsDisplayEnd.setDirections(response);
+
+        });
+    }
+
+    function markerToLocation(marker) {
+        var latLng = marker.position;
+        return latLng.lat() + "," + latLng.lng();
     }
 }
