@@ -12,6 +12,8 @@ var currentLocationMarker;
 var minBikesAtStation = 3;
 var timeFactor = 2;
 
+var stationMarkers = [];
+
 function initMap() {
     map = new google.maps.Map(document.getElementById('map'),
         {
@@ -24,6 +26,7 @@ function initMap() {
     var startPoint = document.getElementById("startPoint");
     var firstStation = document.getElementById("firstStation");
     var destination = document.getElementById("destination");
+    var cost = document.getElementById("cost");
 
     // minBikesAtStationSlider
     var minBikesAtStationSlider = document.getElementById("minBikesAtStationSlider");
@@ -75,10 +78,26 @@ function initMap() {
             for (var i = 0; i < data.length; i++) {
                 var station = data[i];
                 //console.log(station.bikes)
-                markerForBasicStation(station.lat, station.lng, station.name, station.bikes)
+                stationMarkers.push(markerForBasicStation(station.lat, station.lng, station.name, station.bikes));
             }
         }
     });
+
+    var hideStations = document.getElementById("hideStations");
+    console.log(hideStations);
+    hideStations.onclick = function () {
+        if (hideStations.checked) {
+            for (var i = 0; i < stationMarkers.length; i++) {
+                stationMarkers[i].setMap(null);
+            }
+        }
+        else {
+            console.log("un checked");
+            for (var i = 0; i < stationMarkers.length; i++) {
+                stationMarkers[i].setMap(map);
+            }
+        }
+    }
 
     var settingsIcon = document.getElementById("settingsIcon");
     var settingsDiv = document.getElementById("settings");
