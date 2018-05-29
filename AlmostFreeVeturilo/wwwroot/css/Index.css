@@ -10,30 +10,80 @@ html, body {
 
 #reset {
     position: fixed;
-    left: 120px;
+    left: 110px;
     top: 8px;
-    padding: 8px;
-    color: dimgray;
+    /*padding: 8px;*/
     background-color: white;
     border-radius: 3px;
     border-style: solid;
     border-width: 1px;
     border-color: lightgray;
+    font-size: 40px;
+    /*width: 104px;*/
+    padding: 3px;
 }
 
     #reset:hover {
         background-color: ghostwhite;
         border-color: lightslategrey;
+        cursor: pointer;
     }
 
-#info {
+#settingsIcon {
+    position: fixed;
+    left: 177px;
+    top: 8px;
+    background-color: white;
+    border-radius: 3px;
+    border-style: solid;
+    border-width: 1px;
+    border-color: lightgray;
+    font-size: 40px;
+    padding: 3px;
+    /*width:57px;*/
+    text-align: center;
+}
+
+    #settingsIcon:hover {
+        background-color: ghostwhite;
+        border-color: lightslategrey;
+        cursor: pointer;
+    }
+
+#settings {
+    position: fixed;
+    left: 242px;
+    top: 8px;
+    width: 160px;
+    background-color: white;
+    padding-left: 15px;
+    padding-right: 15px;
+    border-radius: 3px;
+    border-color: lightgray;
+    border-width: 1px;
+    border-style: solid;
+    font-size: 20px;
+    color: dimgray;
+    vertical-align: middle;
+}
+
+    #settings p {
+        margin-top: 5px;
+        margin-bottom: 2px;
+    }
+
+    #settings #hideStations {
+        margin-bottom: 16px;
+    }
+
+#instruction {
     position: fixed;
     left: 30px;
     top: 50px;
     width: 160px;
 }
 
-    #info .menuBlock {
+    #instruction .menuBlock {
         width: 100%;
         background-color: white;
         padding-top: 14px;
@@ -48,39 +98,78 @@ html, body {
         vertical-align: middle;
     }
 
-        #info .menuBlock p {
-            font-size: 16px;
-        }
+.baseLast {
+    height: auto;
+    background-color: #8BC980;
+    display: inline-block;
+    margin-left: 0px;
+    margin-top: 35px;
+    position: relative;
+    width: 200px;
+    padding-bottom: 14px;
+}
 
-        #info .menuBlock.done:before {
-            content: "☑️";
-        }
+.base {
+    height: auto;
+    background-color: #8BC980;
+    display: inline-block;
+    margin-left: 0px;
+    margin-top: 35px;
+    position: relative;
+    width: 200px;
+}
 
-        #info .menuBlock.done {
-            height: 44px;
-            opacity: 0.6;
-        }
-
-            #info .menuBlock.done p {
-                display: none;
-            }
-
-        #info .menuBlock.locked {
-            height: 44px;
-            opacity: 0.6;
-        }
-
-            #info .menuBlock.locked p {
-                display: none;
-            }
-
-    #info #startPoint {
+    .base p {
+        margin-bottom: 0px;
     }
 
-    #info #firstStation {
-        margin-top: 4px;
+    .base:after {
+        /*top: 90px;*/
+        border-top: 35px solid #8BC980;
+        border-left: 105px solid transparent;
+        border-right: 105px solid transparent;
+        content: "";
+        height: 0;
+        left: 0;
+        position: absolute;
+        width: 0px;
     }
 
-    #info #destination {
-        margin-top: 4px;
+/*.base.locked:after{
+        opacity:0;
+    }*/
+.baseTextFromat {
+    padding-top: 14px;
+    padding-left: 5px;
+    padding-right: 5px;
+    font-size: 22px;
+    font-weight: bold;
+    text-align: center;
+    color: white;
+}
+
+    .baseTextFromat p {
+        font-size: 16px;
+        color: dimgray;
     }
+
+.locked {
+    opacity: 0.6;
+}
+/*.locked p{
+    height:0px;
+}*/
+
+.done {
+    opacity: 0.6;
+}
+
+    .done:before {
+        /*✅*/
+        content: "☑️";
+    }
+/*.locked p{
+    display:none;
+}*/
+
+
