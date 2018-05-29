@@ -1,13 +1,14 @@
 ﻿
 var map;
-var currentStartStations = [];
-var startMarkers = [];
-var i = 0;
+
 var LOCKED = "locked";
 var DONE = "done";
+
+var startLocMarker;
+var startStationsMarkers = [];
+var chosenStationMarker;
 var pathMarkers = [];
 var endLocMarker;
-var currentLocationMarker;
 
 var minBikesAtStation = 3;
 var timeFactor = 2;
@@ -42,7 +43,7 @@ function initMap() {
     minBikesAtStationSlider.value = minBikesAtStation;
     minBikesAtStationP.innerHTML = "Minimum bicycles at station: " + minBikesAtStation;
 
-    minBikesAtStationSlider.oninput = function() {
+    minBikesAtStationSlider.oninput = function () {
         minBikesAtStation = this.value;
         minBikesAtStationP.innerHTML = "Minimum bicycles at station: " + minBikesAtStation;
     };
@@ -52,19 +53,30 @@ function initMap() {
     timeFactorSlider.value = timeFactor;
     timeFactorP.innerHTML = "Time factor: " + timeFactor;
 
-    timeFactorSlider.oninput = function() {
+    timeFactorSlider.oninput = function () {
         timeFactor = this.value;
         timeFactorP.innerHTML = "Time factor: " + timeFactor;
     };
     //
     var reset = document.getElementById("reset");
     reset.onclick = function () {
+        google.maps.event.clearListeners(map, 'click');
         activeteStartListening();
+
+        if (startLocMarker)
+            startLocMarker.setMap(null);
+
+        startStationsMarkers.forEach(function (m) { m.setMap(null); });
+        startStationsMarkers.length = 0;
+
+        if (chosenStationMarker)
+            chosenStationMarker.setMap(null);
+
         pathMarkers.forEach(function (m) { m.setMap(null); });
         pathMarkers.length = 0;
 
-        endLocMarker.setMap(null);
-        currentLocationMarker.setMap(null);
+        if (endLocMarker)
+            endLocMarker.setMap(null);
 
         startPoint.classList.remove(DONE);
         firstStation.classList.remove(DONE);
@@ -96,7 +108,7 @@ function initMap() {
     });
 
     var hideStations = document.getElementById("hideStations");
-    hideStations.onclick = function() {
+    hideStations.onclick = function () {
         if (hideStations.checked) {
             for (var i = 0; i < stationMarkers.length; i++) {
                 stationMarkers[i].setMap(null);
@@ -111,7 +123,7 @@ function initMap() {
     var settingsIcon = document.getElementById("settingsIcon");
     var settingsDiv = document.getElementById("settings");
     settingsDiv.style.display = "none";
-    settingsIcon.onclick = function() {
+    settingsIcon.onclick = function () {
         if (settingsDiv.style.display === "none")
             settingsDiv.style.display = "block";
         else
@@ -162,8 +174,7 @@ function initMap() {
             url: "http://localhost:50588/api/Path/" + lat + "/" + lng + "/" + minBikesAtStation,
             dataType: "json",
             success: function (data) {
-                currentLocationMarker = createMarker(lat, lng, "Start point", "A");
-                var startStationsMarkers = [];
+                startLocMarker = createMarker(lat, lng, "Start point", "A");
 
                 data.forEach(function (pathPart) {
                     var station = pathPart.station;
@@ -174,7 +185,7 @@ function initMap() {
                         startStationsMarkers.forEach(function (m) { m.setMap(null); });
                         startStationsMarkers.length = 0;
 
-                        showChosenStation(currentLocationMarker, station);
+                        showChosenStation(startLocMarker, station);
                     });
                 });
 
@@ -186,7 +197,7 @@ function initMap() {
         firstStation.classList.add(DONE);
         destination.classList.remove(LOCKED);
 
-        var chosenStationMarker = createMarker(station.lat, station.lng, station.name, station.bikes);
+        chosenStationMarker = createMarker(station.lat, station.lng, station.name, station.bikes);
         google.maps.event.addListener(map, 'click', function (e) {
             google.maps.event.clearListeners(map, 'click');
             destination.classList.add(DONE);
@@ -230,7 +241,7 @@ function initMap() {
     function drawStartWalk() {
         var destinationRoute = pathMarkers.length > 0 ? markerToLocation(pathMarkers[0]) : markerToLocation(endLocMarker);
         directionsService.route({
-            origin: markerToLocation(currentLocationMarker),
+            origin: markerToLocation(startLocMarker),
             destination: destinationRoute,
             travelMode: 'WALKING'
         }, function (response, status) {
@@ -265,7 +276,7 @@ function initMap() {
     }
 
     function drawEndWalk() {
-        var originRoute = pathMarkers.length > 0 ? markerToLocation(pathMarkers[pathMarkers.length - 1]) : markerToLocation(currentLocationMarker);
+        var originRoute = pathMarkers.length > 0 ? markerToLocation(pathMarkers[pathMarkers.length - 1]) : markerToLocation(startLocMarker);
 
         directionsService.route({
             origin: originRoute,
