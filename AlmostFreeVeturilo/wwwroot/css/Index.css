@@ -1,12 +1,8 @@
-﻿#map {
-    height: 100%;
-}
+﻿@media (min-width: 801px) {
 
-html, body {
-    height: 100%;
-    margin: 0;
-    padding: 0;
-}
+    #map {
+        height: 100%;
+    }
 
 #reset {
     position: fixed;
@@ -86,10 +82,31 @@ html, body {
     #instruction .menuBlock {
         width: 100%;
         background-color: white;
-        padding-top: 14px;
+        border-radius: 3px;
+        border-style: solid;
+        border-width: 1px;
+        border-color: lightgray;
+        font-size: 40px;
+        padding: 3px;
+        /*width:57px;*/
+        text-align: center;
+    }
+
+        #settingsIcon:hover {
+            background-color: ghostwhite;
+            border-color: lightslategrey;
+            cursor: pointer;
+        }
+
+    #settings {
+        position: fixed;
+        left: 242px;
+        top: 8px;
+        width: 160px;
+        background-color: white;
         padding-left: 15px;
         padding-right: 15px;
-        border-radius: 5px;
+        border-radius: 3px;
         border-color: lightgray;
         border-width: 1px;
         border-style: solid;
