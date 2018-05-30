@@ -1,4 +1,4 @@
-﻿@media (min-width: 800px) {
+﻿@media (min-width: 801px) {
 
     #map {
         height: 100%;
@@ -103,10 +103,11 @@
     .baseLast {
         height: auto;
         background-color: #8BC980;
-        display: inline-block;
+        position:fixed;
+        left: 30px;
+        top: 431px;
         margin-left: 0px;
         margin-top: 35px;
-        position: relative;
         width: 200px;
         padding-bottom: 14px;
     }

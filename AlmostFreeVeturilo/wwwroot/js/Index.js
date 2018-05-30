@@ -160,6 +160,7 @@ function initMap() {
     //
 
     function activeteStartListening() {
+        console.log('click');
         google.maps.event.addListener(map, 'click', function (e) {
             startPoint.classList.add(DONE);
             firstStation.classList.remove(LOCKED);
