@@ -5,6 +5,7 @@
     <meta name="viewport" content="initial-scale=1.0">
     <meta charset="utf-8">
     <link rel="stylesheet" href="~/css/Index.css" type="text/css" />
+    <link rel="stylesheet" href="~/css/slider.css" type="text/css" />
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyD5xOvCNg3_pQsPgJ-Ies5cni5noiPeKPs&callback=initMap"
             async defer></script>
@@ -12,11 +13,29 @@
 </head>
 <body>
     <div id="map"></div>
-    <div id="reset">Reset</div>
-    <div id="info">
-        <div id="startPoint" class="menuBlock">Start point<p>Click on map to set start position</p></div>
-        <div id="firstStation" class="menuBlock locked">First station<p>Click on marker to select the station to start with</p></div>
-        <div id="destination" class="menuBlock locked">Destination<p>Click on map to set destination position</p></div>
+    <div id="reset">🔄</div>
+    <div id="settingsIcon">⚙️</div>
+    <div id="instruction">
+        <div id="startPoint" class="base baseTextFromat">Start point<p>Click on map to set start position</p></div>
+        <div id="firstStation" class="base baseTextFromat locked">First station<p>Click on marker to select the station to start with</p></div>
+        <div id="destination" class="base baseTextFromat locked">Destination<p>Click on map to set destination position</p></div>
+        <div id="cost" class="baseLast baseTextFromat locked">💰Estimated cost💰 --zł</div>
+    </div>
+
+    <div id="settings">
+        <div>
+            <p id="minBikesAtStationP">Minimum bicycles at station - </p>
+            <input type="range" min="1" max="10" value="3" class="slider" id="minBikesAtStationSlider">
+        </div>
+        <hr />
+        <div>
+            <p id="timeFactorP">Time factor - </p>
+            <input type="range" min="0.5" max="3" step="0.1" value="2" class="slider" id="timeFactorSlider">
+        </div>
+        <hr />
+        <div>
+            <label><input id="hideStations" type="checkbox">Hide stations</label>
+        </div>
     </div>
 </body>
 </html>
