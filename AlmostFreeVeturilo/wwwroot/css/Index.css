@@ -3,84 +3,36 @@
     #map {
         height: 100%;
     }
-
-#reset {
-    position: fixed;
-    left: 110px;
-    top: 8px;
-    /*padding: 8px;*/
-    background-color: white;
-    border-radius: 3px;
-    border-style: solid;
-    border-width: 1px;
-    border-color: lightgray;
-    font-size: 40px;
-    /*width: 104px;*/
-    padding: 3px;
-}
-
-    #reset:hover {
-        background-color: ghostwhite;
-        border-color: lightslategrey;
-        cursor: pointer;
+    html, body {
+        height: 100%;
+        margin: 0;
+        padding: 0;
+    }
+    #reset {
+        position: fixed;
+        left: 110px;
+        top: 8px;
+        /*padding: 8px;*/
+        background-color: white;
+        border-radius: 3px;
+        border-style: solid;
+        border-width: 1px;
+        border-color: lightgray;
+        font-size: 40px;
+        /*width: 104px;*/
+        padding: 3px;
     }
 
-#settingsIcon {
-    position: fixed;
-    left: 177px;
-    top: 8px;
-    background-color: white;
-    border-radius: 3px;
-    border-style: solid;
-    border-width: 1px;
-    border-color: lightgray;
-    font-size: 40px;
-    padding: 3px;
-    /*width:57px;*/
-    text-align: center;
-}
+        #reset:hover {
+            background-color: ghostwhite;
+            border-color: lightslategrey;
+            cursor: pointer;
+        }
 
-    #settingsIcon:hover {
-        background-color: ghostwhite;
-        border-color: lightslategrey;
-        cursor: pointer;
-    }
-
-#settings {
-    position: fixed;
-    left: 242px;
-    top: 8px;
-    width: 160px;
-    background-color: white;
-    padding-left: 15px;
-    padding-right: 15px;
-    border-radius: 3px;
-    border-color: lightgray;
-    border-width: 1px;
-    border-style: solid;
-    font-size: 20px;
-    color: dimgray;
-    vertical-align: middle;
-}
-
-    #settings p {
-        margin-top: 5px;
-        margin-bottom: 2px;
-    }
-
-    #settings #hideStations {
-        margin-bottom: 16px;
-    }
-
-#instruction {
-    position: fixed;
-    left: 30px;
-    top: 50px;
-    width: 160px;
-}
-
-    #instruction .menuBlock {
-        width: 100%;
+    #settingsIcon {
+        position: fixed;
+        left: 177px;
+        top: 8px;
         background-color: white;
         border-radius: 3px;
         border-style: solid;
@@ -115,78 +67,133 @@
         vertical-align: middle;
     }
 
-.baseLast {
-    height: auto;
-    background-color: #8BC980;
-    display: inline-block;
-    margin-left: 0px;
-    margin-top: 35px;
-    position: relative;
-    width: 200px;
-    padding-bottom: 14px;
-}
+        #settings p {
+            margin-top: 5px;
+            margin-bottom: 2px;
+        }
 
-.base {
-    height: auto;
-    background-color: #8BC980;
-    display: inline-block;
-    margin-left: 0px;
-    margin-top: 35px;
-    position: relative;
-    width: 200px;
-}
+        #settings #hideStations {
+            margin-bottom: 16px;
+        }
 
-    .base p {
-        margin-bottom: 0px;
+    #instruction {
+        position: fixed;
+        left: 30px;
+        top: 50px;
+        width: 160px;
     }
 
-    .base:after {
-        /*top: 90px;*/
-        border-top: 35px solid #8BC980;
-        border-left: 105px solid transparent;
-        border-right: 105px solid transparent;
-        content: "";
-        height: 0;
-        left: 0;
-        position: absolute;
-        width: 0px;
+        #instruction .menuBlock {
+            width: 100%;
+            background-color: white;
+            border-radius: 3px;
+            border-style: solid;
+            border-width: 1px;
+            border-color: lightgray;
+            font-size: 40px;
+            padding: 3px;
+            /*width:57px;*/
+            text-align: center;
+        }
+
+    #settingsIcon:hover {
+        background-color: ghostwhite;
+        border-color: lightslategrey;
+        cursor: pointer;
     }
 
-/*.base.locked:after{
+    #settings {
+        position: fixed;
+        left: 242px;
+        top: 8px;
+        width: 160px;
+        background-color: white;
+        padding-left: 15px;
+        padding-right: 15px;
+        border-radius: 3px;
+        border-color: lightgray;
+        border-width: 1px;
+        border-style: solid;
+        font-size: 20px;
+        color: dimgray;
+        vertical-align: middle;
+    }
+
+    .baseLast {
+        height: auto;
+        background-color: #8BC980;
+        left: 32px;
+        top: 432px;
+        /*display: inline-block;*/
+        margin-left: 0px;
+        margin-top: 35px;
+        position: fixed;
+        width: 200px;
+        padding-bottom: 14px;
+    }
+
+    .base {
+        height: auto;
+        background-color: #8BC980;
+        display: inline-block;
+        margin-left: 0px;
+        margin-top: 35px;
+        position: relative;
+        width: 200px;
+    }
+
+        .base p {
+            margin-bottom: 0px;
+        }
+
+        .base:after {
+            /*top: 90px;*/
+            border-top: 35px solid #8BC980;
+            border-left: 105px solid transparent;
+            border-right: 105px solid transparent;
+            content: "";
+            height: 0;
+            left: 0;
+            position: absolute;
+            width: 0px;
+        }
+
+    /*.base.locked:after{
         opacity:0;
     }*/
-.baseTextFromat {
-    padding-top: 14px;
-    padding-left: 5px;
-    padding-right: 5px;
-    font-size: 22px;
-    font-weight: bold;
-    text-align: center;
-    color: white;
-}
-
-    .baseTextFromat p {
-        font-size: 16px;
-        color: dimgray;
+    .baseTextFromat {
+        padding-top: 14px;
+        padding-left: 5px;
+        padding-right: 5px;
+        font-size: 22px;
+        font-weight: bold;
+        text-align: center;
+        color: white;
     }
 
-.locked {
-    opacity: 0.6;
-}
-/*.locked p{
+        .baseTextFromat p {
+            font-size: 16px;
+            color: dimgray;
+        }
+
+    .locked {
+        opacity: 0.6;
+    }
+    /*.locked p{
     height:0px;
 }*/
 
-.done {
-    opacity: 0.6;
-}
-
-    .done:before {
-        /*✅*/
-        content: "☑️";
+    .done {
+        opacity: 0.6;
     }
-/*.locked p{
+
+        .done:before {
+            /*✅*/
+            content: "☑️";
+        }
+    /*.locked p{
     display:none;
 }*/
 
 
+}
