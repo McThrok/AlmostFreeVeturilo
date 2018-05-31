@@ -187,10 +187,10 @@
         opacity: 0.6;
     }
 
-        .done:before {
-            /*✅*/
+        /*.done:before {
+            /*✅
             content: "☑️";
-        }
+        }*/
     /*.locked p{
     display:none;
 }*/

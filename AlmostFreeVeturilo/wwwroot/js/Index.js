@@ -1,5 +1,4 @@
-﻿
-var map;
+﻿var map;
 
 var LOCKED = "locked";
 var DONE = "done";
@@ -11,7 +10,7 @@ var pathMarkers = [];
 var endLocMarker;
 
 var minBikesAtStation = 3;
-var timeFactor = 2;
+var speedFactor = 0.3;
 
 var stationMarkers = [];
 
@@ -50,12 +49,12 @@ function initMap() {
     // timeFactorSlider
     var timeFactorSlider = document.getElementById("timeFactorSlider");
     var timeFactorP = document.getElementById("timeFactorP");
-    timeFactorSlider.value = timeFactor;
-    timeFactorP.innerHTML = "Time factor: " + timeFactor;
+    timeFactorSlider.value = speedFactor;
+    timeFactorP.innerHTML = "Time factor: " + speedFactor;
 
     timeFactorSlider.oninput = function () {
-        timeFactor = this.value;
-        timeFactorP.innerHTML = "Time factor: " + timeFactor;
+        speedFactor = this.value;
+        timeFactorP.innerHTML = "Time factor: " + speedFactor;
     };
     //
     var reset = document.getElementById("reset");
@@ -120,6 +119,7 @@ function initMap() {
         }
     };
 
+
     var settingsIcon = document.getElementById("settingsIcon");
     var settingsDiv = document.getElementById("settings");
     settingsDiv.style.display = "none";
@@ -158,7 +158,6 @@ function initMap() {
         });
     }
     //
-
     function activeteStartListening() {
         console.log('click');
         google.maps.event.addListener(map, 'click', function (e) {
@@ -205,7 +204,7 @@ function initMap() {
             endLocMarker = createMarker(e.latLng.lat(), e.latLng.lng(), "Destination", "B");
 
             $.ajax({
-                url: "http://localhost:50588/api/Path/" + station.uid + "/" + e.latLng.lat() + "/" + e.latLng.lng() + "/" + minBikesAtStation + "/" + timeFactor,
+                url: "http://localhost:50588/api/Path/" + station.uid + "/" + e.latLng.lat() + "/" + e.latLng.lng() + "/" + minBikesAtStation + "/" + 1/speedFactor,
                 dataType: "json",
                 success: function (data) {
                     pathMarkers.push(chosenStationMarker);
