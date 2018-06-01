@@ -1,5 +1,5 @@
 ﻿@media (max-width: 800px) {
-    
+
     #map {
         height: 100%;
     }
@@ -14,14 +14,12 @@
         position: fixed;
         right: 75px;
         top: 8px;
-        /*padding: 8px;*/
         background-color: white;
         border-radius: 3px;
         border-style: solid;
         border-width: 1px;
         border-color: lightgray;
         font-size: 40px;
-        /*width: 104px;*/
         padding: 3px;
     }
 
@@ -42,7 +40,6 @@
         border-color: lightgray;
         font-size: 40px;
         padding: 3px;
-        /*width:57px;*/
         text-align: center;
     }
 
@@ -55,7 +52,7 @@
     #settings {
         position: fixed;
         right: 5px;
-        top:70px;
+        top: 70px;
         width: 160px;
         background-color: white;
         padding-left: 15px;
@@ -67,7 +64,6 @@
         font-size: 20px;
         color: dimgray;
         vertical-align: middle;
-
     }
 
         #settings p {
@@ -80,11 +76,9 @@
         }
 
     #instruction {
-        /*height:100%;*/
         position: fixed;
         left: 3px;
         top: 80px;
-        /*width: 160px;*/
         display: table;
         top: 104px;
         margin: 0 auto;
@@ -110,47 +104,30 @@
 
     .baseLast {
         display: table;
-        /*bottom: 1000px;*/
-        /*position:absolute;*/
         margin: 0 auto;
         transform: translate(-50%, -50%);
-        /*height: auto;*/
         background-color: #8BC980;
-        /*display: inline-block;*/
-        /*margin-left: 0px;*/
-        /*margin-bottom: 35px;*/
         position: fixed;
         left: 50%;
-        /*top: 10px;*/
         bottom: 0px;
         width: 200px;
-        /*height: 80px;*/
         padding-bottom: 10px;
     }
 
     div.base {
         margin-right: 20px;
-        /*top: 100px;k*/
-        /*height: 50px;*/
-        /*width:20%;*/
-        /*background-color: #7e8547;
-        display: inline-block;
-        margin: 0;
-        padding: 0;
-        vertical-align: top;*/
         display: inline-block;
         height: 50px;
         position: relative;
         background-color: #8BC980;
     }
 
-        .base p {
-            display:none;
-            margin-bottom: 0px;
-        }
+    .base p {
+        display: none;
+        margin-bottom: 0px;
+    }
 
     .base:before {
-        /*padding-right:10px;*/
         content: "";
         position: absolute;
         right: -20px;
@@ -162,9 +139,6 @@
         border-bottom: 32px solid transparent;
     }
 
-    /*.base.locked:after{
-        opacity:0;
-    }*/
     .baseTextFromat {
         padding-top: 14px;
         padding-left: 5px;
@@ -183,44 +157,25 @@
     .locked {
         opacity: 0.6;
     }
-    /*.locked p{
-    height:0px;
-}*/
 
     .done {
         opacity: 0.6;
     }
 
-        .done:before {
-            /*✅*/
-            /*content: "☑️";*/
-        }
-    /*.locked p{
-    display:none;
-}*/
-    #startPoint {
-        /*width: 20%;*/
-    }
-
-    #firstStation {
-        /*width: 20%;*/
-    } 
-    
     #destination {
-        right:0px;
+        right: 0px;
         margin-right: 0px;
     }
 
-    #destination:before {
-        content: "";
-        position: absolute;
-        right: 0px;
-        bottom: 0;
-        width: 0;
-        height: 0;
-        border-left: 0px solid red;
-        border-top: 0px solid transparent;
-        border-bottom: 0px solid transparent;
-    }
-
+        #destination:before {
+            content: "";
+            position: absolute;
+            right: 0px;
+            bottom: 0;
+            width: 0;
+            height: 0;
+            border-left: 0px solid red;
+            border-top: 0px solid transparent;
+            border-bottom: 0px solid transparent;
+        }
 }
