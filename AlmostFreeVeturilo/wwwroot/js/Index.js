@@ -1,4 +1,5 @@
 ﻿var map;
+var stationMarkers = [];
 
 var LOCKED = "locked";
 var DONE = "done";
@@ -11,8 +12,6 @@ var endLocMarker;
 
 var minBikesAtStation = 3;
 var speedFactor = 0.3;
-
-var stationMarkers = [];
 
 function initMap() {
     var directionsService = new google.maps.DirectionsService;
@@ -36,7 +35,6 @@ function initMap() {
     var destination = document.getElementById("destination");
     var cost = document.getElementById("cost");
 
-    // minBikesAtStationSlider
     var minBikesAtStationSlider = document.getElementById("minBikesAtStationSlider");
     var minBikesAtStationP = document.getElementById("minBikesAtStationP");
     minBikesAtStationSlider.value = minBikesAtStation;
@@ -46,7 +44,7 @@ function initMap() {
         minBikesAtStation = this.value;
         minBikesAtStationP.innerHTML = "Minimum bicycles at station: " + minBikesAtStation;
     };
-    // timeFactorSlider
+
     var timeFactorSlider = document.getElementById("timeFactorSlider");
     var timeFactorP = document.getElementById("timeFactorP");
     timeFactorSlider.value = speedFactor;
@@ -56,7 +54,7 @@ function initMap() {
         speedFactor = this.value;
         timeFactorP.innerHTML = "Time factor: " + speedFactor;
     };
-    //
+
     var reset = document.getElementById("reset");
     reset.onclick = function () {
         google.maps.event.clearListeners(map, 'click');
@@ -92,15 +90,12 @@ function initMap() {
         directionsDisplayEnd.setDirections({ routes: [] });
     };
 
-    //TODO uncomment
     $.ajax({
         url: "http://localhost:50588/api/Path/",
         dataType: "json",
         success: function (data) {
-            //console.log(data);
             for (var i = 0; i < data.length; i++) {
                 var station = data[i];
-                //console.log(station.bikes)
                 stationMarkers.push(markerForBasicStation(station.lat, station.lng, station.name, station.bikes));
             }
         }
@@ -119,7 +114,6 @@ function initMap() {
         }
     };
 
-
     var settingsIcon = document.getElementById("settingsIcon");
     var settingsDiv = document.getElementById("settings");
     settingsDiv.style.display = "none";
@@ -129,7 +123,7 @@ function initMap() {
         else
             settingsDiv.style.display = "none";
     };
-    // MARKERS
+
     function correctBikesCount(bikes) {
         if (bikes === 0) bikes = "O";
         if (bikes > 10) bikes = 10;
@@ -157,9 +151,8 @@ function initMap() {
             icon: "http://maps.google.com/mapfiles/kml/paddle/" + bikes + ".png"
         });
     }
-    //
+
     function activeteStartListening() {
-        console.log('click');
         google.maps.event.addListener(map, 'click', function (e) {
             startPoint.classList.add(DONE);
             firstStation.classList.remove(LOCKED);
@@ -216,17 +209,6 @@ function initMap() {
                     cost.innerHTML = "💰Estimated cost💰 " + Math.round(data.cost * 100) / 100  + "zł";
 
                     drawRoute();
-
-                    //activeteStartListening();
-                    //map.addListener('click', function fun(e) {
-                    //    //  removeEventListener('click', fun);
-                    //    pathMarkers.forEach(function (m) { m.setMap(null) });
-                    //    pathMarkers.length = 0;
-                    //    currLocMarker.setMap(null);
-                    //    endLocMarker.setMap(null);
-
-                    //});
-
                 }
             });
         });
@@ -277,7 +259,6 @@ function initMap() {
 
     function drawEndWalk() {
         var originRoute = pathMarkers.length > 0 ? markerToLocation(pathMarkers[pathMarkers.length - 1]) : markerToLocation(startLocMarker);
-
         directionsService.route({
             origin: originRoute,
             destination: markerToLocation(endLocMarker),
