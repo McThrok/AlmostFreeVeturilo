@@ -35,8 +35,7 @@ namespace AlmostFreeVeturilo.Logic
 
                 foreach (var vert in vertsToUse)
                 {
-                    if(vert==215 && minVert == 215)
-                    { }
+          
                     var newDistance = distances[minVert] + _edges.GetWeight(_vertices[minVert], _vertices[vert]);
                     if (distances[vert] > newDistance)
                     {
@@ -77,8 +76,8 @@ namespace AlmostFreeVeturilo.Logic
                 v = previous[v];
             }
             path.Reverse();
-            
-            var cost = path.Skip(1).Select(vert => _edges.GetWeight(_vertices[previous[vert]], _vertices[vert])).Sum();
+
+            var cost = path.Skip(1).Select(vert => _edges.GetWeight(_vertices[previous[vert]], _vertices[vert])-Common.ChangeBikePenalty).Sum();
             var uids = path.Select(vert => _vertices[vert]).ToList();
 
             return (uids, cost);

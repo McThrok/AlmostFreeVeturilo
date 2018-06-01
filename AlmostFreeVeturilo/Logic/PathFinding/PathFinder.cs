@@ -42,32 +42,32 @@ namespace AlmostFreeVeturilo.Logic.PathFinding
             var cost = 0f;
             time -= Common.FreeVeturiloTime;
 
-            var firstThreshold = 3600 - Common.FreeVeturiloTime;
+            float firstThreshold = 3600 - Common.FreeVeturiloTime;
             if (time > 0 && time < firstThreshold)
             {
-                cost += Math.Min(time, firstThreshold) / 40;
+                cost += Math.Min(time, firstThreshold) / firstThreshold;
                 time -= firstThreshold;
             }
 
-            var secondThreshold = 3600;
+            float secondThreshold = 3600;
             if (time > 0 && time < secondThreshold)
             {
-                cost += 3 * Math.Min(time, secondThreshold) / 60;
+                cost += 3 * Math.Min(time, secondThreshold) / secondThreshold;
                 time -= secondThreshold;
             }
 
             if (time > 0 && time < secondThreshold)
             {
-                cost += 5 * Math.Min(time, secondThreshold) / 60;
+                cost += 5 * Math.Min(time, secondThreshold) / secondThreshold;
                 time -= secondThreshold;
             }
 
             if (time > 0)
             {
-                cost += 7 * time / 60;
+                cost += 7 * time / secondThreshold;
             }
 
-            cost += +Common.ChangeBikePenalty;
+            cost += Common.ChangeBikePenalty;
 
             return cost;
         }

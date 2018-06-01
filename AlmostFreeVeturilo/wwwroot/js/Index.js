@@ -213,7 +213,7 @@ function initMap() {
                             pathMarkers.push(createMarker(station.lat, station.lng, station.name, station.bikes));
                     });
                     cost.classList.remove(LOCKED);
-                    cost.innerHTML = "💰Estimated cost💰 " + data.cost + "zł";
+                    cost.innerHTML = "💰Estimated cost💰 " + Math.round(data.cost * 100) / 100  + "zł";
 
                     drawRoute();
 
