@@ -3,23 +3,23 @@
     #map {
         height: 100%;
     }
+
     html, body {
         height: 100%;
         margin: 0;
         padding: 0;
     }
+
     #reset {
         position: fixed;
         left: 110px;
         top: 8px;
-        /*padding: 8px;*/
         background-color: white;
         border-radius: 3px;
         border-style: solid;
         border-width: 1px;
         border-color: lightgray;
         font-size: 40px;
-        /*width: 104px;*/
         padding: 3px;
     }
 
@@ -40,7 +40,6 @@
         border-color: lightgray;
         font-size: 40px;
         padding: 3px;
-        /*width:57px;*/
         text-align: center;
     }
 
@@ -92,7 +91,6 @@
             border-color: lightgray;
             font-size: 40px;
             padding: 3px;
-            /*width:57px;*/
             text-align: center;
         }
 
@@ -124,7 +122,6 @@
         background-color: #8BC980;
         left: 32px;
         top: 432px;
-        /*display: inline-block;*/
         margin-left: 0px;
         margin-top: 35px;
         position: fixed;
@@ -147,7 +144,6 @@
         }
 
         .base:after {
-            /*top: 90px;*/
             border-top: 35px solid #8BC980;
             border-left: 105px solid transparent;
             border-right: 105px solid transparent;
@@ -158,9 +154,6 @@
             width: 0px;
         }
 
-    /*.base.locked:after{
-        opacity:0;
-    }*/
     .baseTextFromat {
         padding-top: 14px;
         padding-left: 5px;
@@ -179,21 +172,8 @@
     .locked {
         opacity: 0.6;
     }
-    /*.locked p{
-    height:0px;
-}*/
 
     .done {
         opacity: 0.6;
     }
-
-        /*.done:before {
-            /*✅
-            content: "☑️";
-        }*/
-    /*.locked p{
-    display:none;
-}*/
-
-
 }
